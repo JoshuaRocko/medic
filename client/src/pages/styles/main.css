@@ -1,0 +1,18 @@
+.boton {
+  margin: 0.5em;
+}
+
+.title {
+  font-size: 5rem;
+  font-style: italic;
+}
+
+.in {
+  width: 300px;
+  height: 50px;
+  border: 3px solid #00b4cc;
+  border-right: none;
+  padding: 5px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+}
