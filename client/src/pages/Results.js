@@ -26,28 +26,28 @@ class Results extends React.Component {
     }
     return (
       <React.Fragment>
-        <div>
-          <div className="container">
+        <div className="container">
+          <div className="card-columns">
             {this.state.data.map((result) => {
               return (
-                <div key={result.link} className="row">
-                  <div className="col">
-                    <img
-                      className="rounded float-left imagen"
-                      src={result.img}
-                      alt="imagen"
-                    />
-                    <div className="col">
-                      <h4>{result.desc}</h4>
-                      <p>Precio: {result.precio}</p>
-                      <a
-                        href={result.link}
-                        className="btn-primary"
-                        target="blank"
-                      >
-                        Ir al sitio
+                <div key={result.link} className="card mb-3">
+                  <img
+                    className="card-img-top imagen"
+                    src={result.img}
+                    alt="imagen"
+                  />
+                  <div className="card-body">
+                    <h4 className="card-title text-primary">{result.desc}</h4>
+                    <p className="card-text">Precio: {result.precio}</p>
+                  </div>
+                  <div className="card-footer text-center">
+                    <a
+                      href={result.link}
+                      className="btn btn-dark"
+                      target="blank"
+                    >
+                      Ir al sitio
                       </a>
-                    </div>
                   </div>
                 </div>
               );

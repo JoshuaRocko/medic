@@ -21,14 +21,15 @@ class Home extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="fondo">
         <div className="d-flex align-items-center flex-column">
           <p className="title">Medic Scraper</p>
           <h3>Buscar medicamento</h3>
           <div className="d-flex align-items-center">
             <input
               className="in"
-              type="text"
+              type="search"
+              placeholder="Teclea el nombre del medicamento"
               onChange={this.handleInput}
               value={this.state.med}
             />
@@ -37,7 +38,7 @@ class Home extends React.Component {
             </Link>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
