@@ -1,6 +1,6 @@
 import React from "react";
 import PageLoading from "../components/PageLoading";
-import Card from "../components/Card";
+import "./styles/Results.css";
 
 class Results extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Results extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`/search/${this.props.med}`)
+    fetch(`/search/${this.props.match.params.med}`)
       .then((response) => {
         return response.json();
       })
@@ -26,10 +26,31 @@ class Results extends React.Component {
     }
     return (
       <React.Fragment>
-        <div className="container">
-          <div className="card-deck">
+        <div>
+          <div className="container">
             {this.state.data.map((result) => {
-              return <Card data={result}></Card>;
+              return (
+                <div key={result.link} className="row">
+                  <div className="col">
+                    <img
+                      className="rounded float-left imagen"
+                      src={result.img}
+                      alt="imagen"
+                    />
+                    <div className="col">
+                      <h4>{result.desc}</h4>
+                      <p>Precio: {result.precio}</p>
+                      <a
+                        href={result.link}
+                        className="btn-primary"
+                        target="blank"
+                      >
+                        Ir al sitio
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
             })}
           </div>
         </div>
