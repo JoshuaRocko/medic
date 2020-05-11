@@ -36,6 +36,11 @@ class Home extends React.Component {
             <Link to={`/results/${this.state.med}`}>
               <FontAwesomeIcon icon={faSearch} size="3x" />
             </Link>
+{/* ************************************** */}
+            <Link to={`./Registration`}>
+              <FontAwesomeIcon icon={faSearch} size="3x" />
+            </Link>
+{/* ************************************** */}
           </div>
         </div>
       </div>
