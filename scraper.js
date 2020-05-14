@@ -1,11 +1,6 @@
 var puppeteer = require("puppeteer");
 
 async function searchChe(med, page) {
-  //const med = 'xl3'
-  //var options = {headlees: false};
-  // const browser = await puppeteer.launch({headless: true});
-  //var page = await browser.newPage();
-  //await page.setViewport({height: 1200, width:960});
   await page.goto(
     `https://www.chedraui.com.mx/search?q=${med}%3Arelevance%3Acategory_l_1%3AMC24&text=xl3&toggleView=grid`
   );
@@ -33,18 +28,11 @@ async function searchChe(med, page) {
   );
   let arr = [];
   arr.push(titles, prices, imgs, links);
-  //for (var i = 0; i < arr.length; i++) {
-  //   console.log(arr[i]);
-  // }
+
   return arr;
 }
 
 async function searchAmz(med, page) {
-  //const med = 'xl3'
-  // var options = {headlees: false};
-  //const browser = await puppeteer.launch({headless: true});
-  //var page = await browser.newPage();
-  //await page.setViewport({height: 1200, width:960});
   await page.goto(
     "https://www.amazon.com.mx/s?k=" +
       med +
@@ -71,17 +59,10 @@ async function searchAmz(med, page) {
   const links = [link];
   let arr = [];
   arr.push(titles, prices, imgs, links);
-  //for (var i = 0; i < arr.length; i++) {
-  //   console.log(arr[i]);
-  //}
+
   return arr;
 }
 async function searchFaho(med, page) {
-  //const med = 'xl3'
-  //var options = {headlees: false};
-  //const browser = await puppeteer.launch({headless: true});
-  //var page = await browser.newPage();
-  //await page.setViewport({height: 1200, width:960});
   await page.goto("https://www.fahorro.com/catalogsearch/result/?q=" + med);
   const titles = await page.evaluate(() =>
     Array.from(document.querySelectorAll(".product-shop > h2")).map((partner) =>
@@ -106,10 +87,6 @@ async function searchFaho(med, page) {
   );
   let arr = [];
   arr.push(titles, prices, imgs, links);
-  //for (var i = 0; i < arr.length; i++) {
-  //   console.log(arr[i]);
-  //}
-  //    console.log(arr);
 
   return arr;
 }
@@ -119,23 +96,19 @@ async function search(m) {
   const p = await browser.newPage();
   await p.setViewport({ height: 1200, width: 960 });
   let prod = [];
-  //searchFaho(m);
-  //console.log(searchFaho(m,p));
-  //console.log(await searchAmz(m,p));
-  //console.log(await searchChe(m,p));
-  //searchAmz(m);
-  //searchChe(m);
-  // prod.push(await searchFaho(m, p),await  searchAmz(m, p),await searchChe(m, p));
 
-  const pF = await searchFaho(m, p);
+  // const pF = await searchFaho(m, p);
   const pA = await searchAmz(m, p);
   const pC = await searchChe(m, p);
-  const titles = pF[0].concat(pA[0], pC[0]);
-  const prices = pF[1].concat(pA[1], pC[1]);
-  const imgs = pF[2].concat(pA[2], pC[2]);
-  const links = pF[3].concat(pA[3], pC[3]);
-  //console.log(titles);
-  //prod.push(titles, prices,imgs,links);
+  // const titles = pF[0].concat(pA[0], pC[0]);
+  // const prices = pF[1].concat(pA[1], pC[1]);
+  // const imgs = pF[2].concat(pA[2], pC[2]);
+  // const links = pF[3].concat(pA[3], pC[3]);
+
+  const titles = pA[0].concat(pC[0]);
+  const prices = pA[1].concat(pC[1]);
+  const imgs = pA[2].concat(pC[2]);
+  const links = pA[3].concat(pC[3]);
 
   for (var i = 0; i < titles.length; i++) {
     const ob = new Object();
@@ -145,13 +118,8 @@ async function search(m) {
     ob.link = links[i];
     prod.push(ob);
   }
-  ///////////////////////////////
-  //for (var i=0; i<titles.length; i++) {
-  //    console.log((prod[i]).desc);
-  //}
 
   return prod;
-  /////////////////////
 }
 
 module.exports = {

@@ -21,4 +21,5 @@
 .fondo {
   background-color: #008ec8;
   background-image: linear-gradient(to bottom right, #333272, #00b4cc);
+  padding-bottom: 100%;
 }

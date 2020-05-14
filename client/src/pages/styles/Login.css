@@ -1,0 +1,12 @@
+.forms {
+  margin-top: 5rem;
+}
+
+.title {
+  color: black;
+}
+
+input,
+button {
+  margin: 1rem;
+}

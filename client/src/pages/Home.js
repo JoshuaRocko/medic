@@ -16,7 +16,6 @@ class Home extends React.Component {
     this.setState({
       med: event.target.value,
     });
-    console.log(event.target.value);
   };
 
   render() {
@@ -36,11 +35,6 @@ class Home extends React.Component {
             <Link to={`/results/${this.state.med}`}>
               <FontAwesomeIcon icon={faSearch} size="3x" />
             </Link>
-{/* ************************************** */}
-            <Link to={`./Registration`}>
-              <FontAwesomeIcon icon={faSearch} size="3x" />
-            </Link>
-{/* ************************************** */}
           </div>
         </div>
       </div>

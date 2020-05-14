@@ -6,17 +6,18 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      menu: false
+      menu: false,
+      session: false,
     };
     this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   toggleMenu() {
-    this.setState({ menu: !this.state.menu })
+    this.setState({ menu: !this.state.menu });
   }
 
   render() {
-    const show = (this.state.menu) ? "show" : "";
+    const show = this.state.menu ? "show" : "";
 
     return (
       <React.Fragment>
@@ -24,16 +25,24 @@ class Nav extends React.Component {
           <Link to="/" className="navbar-brand">
             <h1>Medic Scraper</h1>
           </Link>
-          <button className="navbar-toggler" type="button" onClick={this.toggleMenu}>
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className={"collapse navbar-collapse " + show}>
-            <div className="navbar-nav ml-auto">
-              <button type="button" className="btn btn-primary btn-lg">
-                Iniciar sesi&oacute;n
+          {!this.state.session && (
+            <React.Fragment>
+              <button
+                className="navbar-toggler"
+                type="button"
+                onClick={this.toggleMenu}
+              >
+                <span className="navbar-toggler-icon"></span>
               </button>
-            </div>
-          </div>
+              <div className={"collapse navbar-collapse " + show}>
+                <div className="navbar-nav ml-auto">
+                  <Link to="/Login" className="btn btn-primary btn-lg">
+                    Iniciar sesi&oacute;n
+                  </Link>
+                </div>
+              </div>
+            </React.Fragment>
+          )}
         </nav>
       </React.Fragment>
     );
