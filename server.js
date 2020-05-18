@@ -3,11 +3,32 @@ const bodyParser = require("body-parser");
 const scraper = require("./scraper");
 const pool = require("./database");
 
+var puppeteer = require("puppeteer");
+
 const app = express();
 
+var p;
+
+(async()=> {
+  const browser= await puppeteer.launch();
+  p = await browser.newPage();
+
+
+  p.on('error', err=> {
+    console.log('error happen at the page: ', err);
+  });
+
+  p.on('pageerror', pageerr=> {
+    console.log('pageerror occurred: ', pageerr);
+  })
+})();
+
+
 app.get("/search/:med", async (req, res) => {
-  const data = await scraper.search(req.params.med);
+  const data = await scraper.search(req.params.med, p);
   res.json(data);
+  const info = await scraper.getInfo(req.params.med, p);
+  inf.json(info);
 });
 
 app.get("/users", (req, res) => {

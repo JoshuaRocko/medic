@@ -1,6 +1,7 @@
 var puppeteer = require("puppeteer");
 
 async function searchChe(med, page) {
+  try{
   await page.goto(
     `https://www.chedraui.com.mx/search?q=${med}%3Arelevance%3Acategory_l_1%3AMC24&text=xl3&toggleView=grid`
   );
@@ -17,7 +18,7 @@ async function searchChe(med, page) {
   );
 
   const imgs = await page.evaluate(() =>
-    Array.from(document.querySelectorAll("div.plp-product-thumb > img")).map(
+    Array.from(document.querySelectorAll("div.plp-product-thumb > img:not([class='PLP-promotion-icon'])")).map(
       (img) => img.src
     )
   );
@@ -29,10 +30,15 @@ async function searchChe(med, page) {
   let arr = [];
   arr.push(titles, prices, imgs, links);
 
-  return arr;
+  return arr;}
+  catch(e){
+    console.log(e);
+    return null;
+  }
 }
 
 async function searchAmz(med, page) {
+  try{
   await page.goto(
     "https://www.amazon.com.mx/s?k=" +
       med +
@@ -61,8 +67,13 @@ async function searchAmz(med, page) {
   arr.push(titles, prices, imgs, links);
 
   return arr;
+  }catch(e){
+    console.log(e);
+    return null;
+  }
 }
 async function searchFaho(med, page) {
+  try{
   await page.goto("https://www.fahorro.com/catalogsearch/result/?q=" + med);
   const titles = await page.evaluate(() =>
     Array.from(document.querySelectorAll(".product-shop > h2")).map((partner) =>
@@ -90,25 +101,24 @@ async function searchFaho(med, page) {
 
   return arr;
 }
+  catch(e){
+    console.log(e);
+    return null;
+  }
+}
 
-async function search(m) {
-  const browser = await puppeteer.launch({ headless: true });
-  const p = await browser.newPage();
-  await p.setViewport({ height: 1200, width: 960 });
+async function search(m,p) {
+  
   let prod = [];
 
-  // const pF = await searchFaho(m, p);
+  const pF = await searchFaho(m, p);
   const pA = await searchAmz(m, p);
   const pC = await searchChe(m, p);
-  // const titles = pF[0].concat(pA[0], pC[0]);
-  // const prices = pF[1].concat(pA[1], pC[1]);
-  // const imgs = pF[2].concat(pA[2], pC[2]);
-  // const links = pF[3].concat(pA[3], pC[3]);
-
-  const titles = pA[0].concat(pC[0]);
-  const prices = pA[1].concat(pC[1]);
-  const imgs = pA[2].concat(pC[2]);
-  const links = pA[3].concat(pC[3]);
+  
+  const titles = pF[0].concat(pA[0], pC[0]);
+  const prices = pF[1].concat(pA[1], pC[1]);
+  const imgs = pF[2].concat(pA[2], pC[2]);
+  const links = pF[3].concat(pA[3], pC[3]);
 
   for (var i = 0; i < titles.length; i++) {
     const ob = new Object();
@@ -124,4 +134,44 @@ async function search(m) {
 
 module.exports = {
   search,
+  //////////////////////////////
+  getInfo,
+  ///////////////////////
 };
+
+
+
+async function getInfo(med, page) {
+  try{
+    await page.goto(
+      "https://quefarmacia.com/medicamentos/"+med+"/"
+    );
+    
+    const desc = document.querySelector("div.bugiardinoBox > p").innerText.trim();
+    if(desc.includes('.')){
+      desc = desc.substr(0, desc.indexOf('.')+1);
+    }
+
+    const info = await page.evaluate(() =>
+    Array.from(document.querySelectorAll(".col-md-8 > p")).map(
+      (img) => img.src
+    )
+  );
+  const info2 = await page.evaluate(() =>
+    Array.from(document.querySelectorAll(".col-md-4 > p")).map(
+      (img) => img.src
+    )
+  );
+  var i = info.concat(info2);
+
+  const ob = new Object();
+  ob.desc = desc; //String que contiene Descripción del medicamento
+  ob.info = i; //Array de Strings (info)
+
+  return ob;
+  }catch(e){
+      console.log(e);
+      return null;
+    }
+  }
+  
