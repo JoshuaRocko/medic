@@ -148,7 +148,7 @@ async function getInfo(med, page) {
         XPathResult.FIRST_ORDERED_NODE_TYPE,
         null
       ).singleNodeValue;
-      return featureArticle.textContent.split(".")[0];
+      return featureArticle.textContent.split('.')[0];
     });
 
     const usos = await page.evaluate(() => {
@@ -174,7 +174,7 @@ async function getInfo(med, page) {
     });
     const ad = await page.evaluate(() => {
       const featureArticle = document.evaluate(
-        "//*[@id='bugiardinoBox']/ul[6]",
+        "//*[@id='bugiardinoBox']/ul[5]",
         document,
         null,
         XPathResult.FIRST_ORDERED_NODE_TYPE,
@@ -184,12 +184,23 @@ async function getInfo(med, page) {
     });
 
     // console.log(ad);
+    var arU = usos.split("\n");
+    arU.shift();
+    arU.pop();
+
+    var arC = contradicciones.split("\n");
+    arC.shift();
+    arC.pop();
+
+    var arAd = ad.split("\n");
+    arAd.shift();
+    arAd.pop();
 
     const ob = new Object();
     ob.info = info; //Array de Strings (info)
-    ob.usos = usos.split(".");
-    ob.contradicciones = contradicciones.split(".");
-    ob.ad = ad.split(".");
+    ob.usos = arU;
+    ob.contradicciones = arC;
+    ob.ad = arAd;
 
     return ob;
   } catch (e) {
