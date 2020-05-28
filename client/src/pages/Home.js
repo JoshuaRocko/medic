@@ -22,7 +22,7 @@ class Home extends React.Component {
     return (
       <div className="fondo">
         <div className="d-flex align-items-center flex-column">
-          <p className="title">Medic Scraper</p>
+          <p className="titlehome">Medic Scraper</p>
           <h3>Buscar medicamento</h3>
           <div className="d-flex align-items-center">
             <input

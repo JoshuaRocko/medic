@@ -1,6 +1,7 @@
 import React from "react";
 import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
+import { Link } from "react-router-dom";
 
 class Results extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class Results extends React.Component {
       loading: true,
       error: null,
       data: undefined,
-      filter: 1
+      filter: 1,
     };
 
     this.changeFilter = this.changeFilter.bind(this);
@@ -28,17 +29,15 @@ class Results extends React.Component {
     console.log(this.state.filter);
     let aux = this.state.data;
     const dataOrdered = aux.sort((a, b) => {
-        let precioA = a.precio.split("$");
-        let precioB = b.precio.split("$");
-        console.log("::::::::::", aux);
-        if(this.state.filter === 1)
-          return precioB[1] - precioA[1];
-        else
-          return precioA[1] - precioB[1];
-        //return precioA[1] > precioB[1] ? 1 : precioA[1] < precioB[1] ? -1 : 0;
-      });
-      this.setState({ data: dataOrdered });
-   /* } else {
+      let precioA = a.precio.split("$");
+      let precioB = b.precio.split("$");
+      console.log("::::::::::", aux);
+      if (this.state.filter === 1) return precioB[1] - precioA[1];
+      else return precioA[1] - precioB[1];
+      //return precioA[1] > precioB[1] ? 1 : precioA[1] < precioB[1] ? -1 : 0;
+    });
+    this.setState({ data: dataOrdered });
+    /* } else {
       const dataOrdered = this.state.data.sort((a, b) => {
         let precioA = a.precio.split("$");
         let precioB = b.precio.split("$");
@@ -60,10 +59,22 @@ class Results extends React.Component {
     }
     return (
       <React.Fragment>
+        <div className="alert alert-primary" role="alert">
+          <p className="mb-0">
+            <Link to={`/information/${this.props.match.params.med}`}>
+              Ver información del medicamento
+            </Link>
+          </p>
+        </div>
         <nav className="navbar sticky-top navbar-light bg-light">
           <p className="navbar-brand"></p>
           <div className="form-group row">
-            <select className="form-control" id="filter" onChange={this.changeFilter} value={this.state.filter}>
+            <select
+              className="form-control"
+              id="filter"
+              onChange={this.changeFilter}
+              value={this.state.filter}
+            >
               <option value="1">De menor a mayor</option>
               <option value="2">De mayor a menor</option>
             </select>
@@ -90,7 +101,7 @@ class Results extends React.Component {
                       target="blank"
                     >
                       Ir al sitio
-                      </a>
+                    </a>
                   </div>
                 </div>
               );

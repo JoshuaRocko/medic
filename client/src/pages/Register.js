@@ -61,19 +61,36 @@ class Register extends React.Component {
       loading: true,
       error: null,
     });
-    fetch(
-      `/create/${this.state.form.email}/${this.state.form.username}/${this.state.form.pass1}`,
-      { method: "POST" }
-    )
+
+    fetch(`/verifyuser/${this.state.form.username}/${this.state.form.email}`, {
+      method: "GET",
+    })
       .then((response) => {
         return response.json();
       })
       .then((result) => {
-        this.setState({
-          loading: false,
-          error: null,
-          userId: result.insertId,
-        });
+        if (!result.userExists) {
+          fetch(
+            `/create/${this.state.form.email}/${this.state.form.username}/${this.state.form.pass1}`,
+            { method: "POST" }
+          )
+            .then((response) => {
+              return response.json();
+            })
+            .then((result) => {
+              this.setState({
+                loading: false,
+                error: null,
+                userId: result.insertId,
+              });
+            });
+        } else {
+          this.setState({
+            loading: false,
+            error: null,
+            userId: -1,
+          });
+        }
       });
   };
 
@@ -81,7 +98,7 @@ class Register extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
-    if (this.state.userId) {
+    if (this.state.userId > 0) {
       return (
         <div className="alert alert-success" role="alert">
           <p>
@@ -107,6 +124,14 @@ class Register extends React.Component {
             {this.state.alertUsernameErr && (
               <p className="mb-0">El usuario debe tener almenos 3 caracteres</p>
             )}
+          </div>
+        )}
+        {this.state.userId === -1 && (
+          <div className="alert alert-danger" role="alert">
+            <p className="mb-0">
+              El nombre de usuario o el email ya se encuentra registrado. Por
+              favor intenta de nuevo
+            </p>
           </div>
         )}
         <div className="d-flex align-items-center flex-column forms">

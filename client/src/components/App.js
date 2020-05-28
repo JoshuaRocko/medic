@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 // import Registration from "../pages/Registration";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Information from "../pages/Information";
 
 function App(props) {
   return (
@@ -17,6 +18,7 @@ function App(props) {
           <Route exact path="/results/:med" component={Results} />
           <Route exact path="/Registration/" component={Register} />
           <Route exact path="/Login" component={Login} />
+          <Route exact path="/information/:med" component={Information}></Route>
         </Switch>
       </BrowserRouter>
     </React.Fragment>

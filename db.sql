@@ -9,5 +9,3 @@ create table users (
     pass varchar(32) not null,
     created_on datetime not null default current_timestamp
 );
-
-insert into users (username, email, pass) values ("JoshuaRocko", "joshua.chirino@gmail.com",md5("password1234")); 
