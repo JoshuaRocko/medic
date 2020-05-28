@@ -111,14 +111,18 @@ async function searchFaho(med, page) {
 async function search(m, p) {
   let prod = [];
 
-  const pF = await searchFaho(m, p);
+  //const pF = await searchFaho(m, p);
   const pA = await searchAmz(m, p);
   const pC = await searchChe(m, p);
 
-  const titles = pF[0].concat(pA[0], pC[0]);
-  const prices = pF[1].concat(pA[1], pC[1]);
-  const imgs = pF[2].concat(pA[2], pC[2]);
-  const links = pF[3].concat(pA[3], pC[3]);
+  // const titles = pF[0].concat(pA[0], pC[0]);
+  // const prices = pF[1].concat(pA[1], pC[1]);
+  // const imgs = pF[2].concat(pA[2], pC[2]);
+  // const links = pF[3].concat(pA[3], pC[3]);
+  const titles = pA[0].concat(pC[0]);
+  const prices = pA[1].concat(pC[1]);
+  const imgs = pA[2].concat(pC[2]);
+  const links = pA[3].concat(pC[3]);
 
   for (let i = 0; i < titles.length; i++) {
     const ob = new Object();
@@ -168,19 +172,24 @@ async function getInfo(med, page) {
       ).singleNodeValue;
       return featureArticle.textContent;
     });
-    // const ad = await page.evaluate(() => {
-    //   Array.from(
-    //     document.querySelectorAll("#bugiardinoBox > ul:nth-child(22)")
-    //   );
-    // });
+    const ad = await page.evaluate(() => {
+      const featureArticle = document.evaluate(
+        "//*[@id='bugiardinoBox']/ul[6]",
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue;
+      return featureArticle.textContent;
+    });
 
     // console.log(ad);
 
     const ob = new Object();
     ob.info = info; //Array de Strings (info)
     ob.usos = usos.split(".");
-    // ob.contradicciones = contradicciones;
-    // ob.ad = ad;
+    ob.contradicciones = contradicciones.split(".");
+    ob.ad = ad.split(".");
 
     return ob;
   } catch (e) {

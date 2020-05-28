@@ -50,6 +50,29 @@ class Information extends React.Component {
         </div>
         <div>
           <h3>Contradicciones y advertencias</h3>
+          <ul>
+            {this.state.data.contradicciones
+              .filter((uso) => {
+                return uso !== "\n";
+              })
+              .map((uso) => {
+                return <li key={uso}>{uso.trim()}</li>;
+              })}
+          </ul>
+          {console.log(this.state.data.contradicciones)}
+        </div>
+        <div>
+          <h3>Efectos Secundarios</h3>
+          <h5>Este medicamento podría provocar algunos efectos secundarios tales como:</h5>
+          <ul>
+            {this.state.data.ad
+              .filter((uso) => {
+                return uso !== "\n";
+              })
+              .map((uso) => {
+                return <li key={uso}>{uso.trim()}</li>;
+              })}
+          </ul>
           {console.log(this.state.data.ad)}
         </div>
         <div className></div>
