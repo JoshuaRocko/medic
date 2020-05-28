@@ -9,7 +9,10 @@ class Results extends React.Component {
       loading: true,
       error: null,
       data: undefined,
+      filter: 1
     };
+
+    this.changeFilter = this.changeFilter.bind(this);
   }
 
   componentDidMount() {
@@ -20,12 +23,52 @@ class Results extends React.Component {
       .then((data) => this.setState({ data, loading: false }));
   }
 
+  changeFilter(event) {
+    this.setState({ filter: event.target.value });
+    console.log(this.state.filter);
+    let aux = this.state.data;
+    const dataOrdered = aux.sort((a, b) => {
+        let precioA = a.precio.split("$");
+        let precioB = b.precio.split("$");
+        console.log("::::::::::", aux);
+        if(this.state.filter === 1)
+          return precioB[1] - precioA[1];
+        else
+          return precioA[1] - precioB[1];
+        //return precioA[1] > precioB[1] ? 1 : precioA[1] < precioB[1] ? -1 : 0;
+      });
+      this.setState({ data: dataOrdered });
+   /* } else {
+      const dataOrdered = this.state.data.sort((a, b) => {
+        let precioA = a.precio.split("$");
+        let precioB = b.precio.split("$");
+        return precioA[1] - precioB[1]
+        //return precioA[1] < precioB[1] ? 1 : precioA[1] > precioB[1] ? -1 : 0;
+      });
+      this.setState({ data: dataOrdered });
+    }
+    console.log(this.state.data);*/
+  }
+
+  /*<form className="form-inline">
+            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>*/
   render() {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
     return (
       <React.Fragment>
+        <nav className="navbar sticky-top navbar-light bg-light">
+          <p className="navbar-brand"></p>
+          <div className="form-group row">
+            <select className="form-control" id="filter" onChange={this.changeFilter} value={this.state.filter}>
+              <option value="1">De menor a mayor</option>
+              <option value="2">De mayor a menor</option>
+            </select>
+          </div>
+        </nav>
         <div className="container">
           <div className="card-columns">
             {this.state.data.map((result) => {
