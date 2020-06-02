@@ -11,7 +11,7 @@ let p;
 (async () => {
   const browser = await puppeteer.launch();
   p = await browser.newPage();
-
+  await p.setDefaultTimeout(45000); 
   p.on("error", (err) => {
     console.log("error happen at the page: ", err);
   });

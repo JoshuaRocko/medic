@@ -35,6 +35,7 @@ class Information extends React.Component {
       <React.Fragment>
         <h1 className="title">{this.props.match.params.med.toUpperCase()}</h1>
         <hr />
+        <h5>Consulta a tu médico siempre / NO te automediques / Esta es una Guía informativa</h5>
         <p className="info">{this.state.data.info}</p>
         <div className="info">
           <h3>Usos más comúnes</h3>
@@ -74,6 +75,12 @@ class Information extends React.Component {
               })}
           </ul>
           {console.log(this.state.data.ad)}
+        </div>
+        <div>
+        <h6>
+          Para más información visita:
+        </h6>
+        <p><a href={'https://quefarmacia.com/medicamentos/' + this.props.match.params.med}>https://quefarmacia.com/medicamentos/{this.props.match.params.med}</a></p>
         </div>
         <div className></div>
       </React.Fragment>
