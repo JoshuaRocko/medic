@@ -67,8 +67,8 @@ class Results extends React.Component {
           </p>
         </div>
         <nav className="navbar sticky-top navbar-light bg-light">
-          <p className="navbar-brand"></p>
-          <div className="form-group row">
+          <p className="navbar-brand"></p><h2 className="card-title text-primary">Resultados de búsqueda de: {this.props.match.params.med}</h2  >
+          <div className="form-group row"> &nbsp;&nbsp;&nbsp; Ordenar productos
             <select
               className="form-control"
               id="filter"
@@ -86,12 +86,13 @@ class Results extends React.Component {
               return (
                 <div key={result.link} className="card mb-3">
                   <img
+                    href={result.link}
                     className="card-img-top imagen"
                     src={result.img}
-                    alt="imagen"
+                    alt="Imagen no disponible por el momento"
                   />
                   <div className="card-body">
-                    <h4 className="card-title text-primary">{result.desc}</h4>
+                    <a className="card-title text-primary" href={result.link}>{result.desc}</a>
                     <p className="card-text">Precio: {result.precio}</p>
                   </div>
                   <div className="card-footer text-center">
