@@ -1,217 +1,234 @@
 var puppeteer = require("puppeteer");
 async function searchFarN(med, page) {
   try {
-    await page.goto(
-      `https://farmaciasdelnino.mx/esp/items/?kw=`+med
-    );
+    await page.goto(`https://farmaciasdelnino.mx/esp/items/?kw=` + med);
     await scrollToBottom(page);
     await delay(3000);
 
     const titles = await page.evaluate(() =>
-       Array.from(document.querySelectorAll("div#catalogo > .productos > div.descripcion > h2 , div#catalogo > .productosultimo >div.descripcion > h2")
-       ).map((partner) =>
-        partner.innerText.trim()
-      ).splice(0,6)
+      Array.from(
+        document.querySelectorAll(
+          "div#catalogo > .productos > div.descripcion > h2 , div#catalogo > .productosultimo >div.descripcion > h2"
+        )
+      )
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
       Array.from(
-          document.querySelectorAll("div#catalogo > .productos > div.precio .oferta, div#catalogo > .productosultimo > div.precio .oferta ")
-      ).map((partner) => partner.innerText.trim()).splice(0,6)
+        document.querySelectorAll(
+          "div#catalogo > .productos > div.precio .oferta, div#catalogo > .productosultimo > div.precio .oferta "
+        )
+      )
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
-    
+
     const imgs = await page.evaluate(() =>
-          Array.from(
-              document.querySelectorAll(
-              "div#catalogo > .productos > .foto > a > img, 	div#catalogo > .productosultimo > .foto > a > img"
-              )
-          ).map((img) => img.src).splice(0,6)
+      Array.from(
+        document.querySelectorAll(
+          "div#catalogo > .productos > .foto > a > img, 	div#catalogo > .productosultimo > .foto > a > img"
+        )
+      )
+        .map((img) => img.src)
+        .splice(0, 6)
     );
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("div#catalogo > .productos > div.descripcion > h2 > a, div#catalogo > .productosultimo >div.descripcion > h2 > a")
-          ).map(
-          (partner) => partner.href
-      ).splice(0,6)
+      Array.from(
+        document.querySelectorAll(
+          "div#catalogo > .productos > div.descripcion > h2 > a, div#catalogo > .productosultimo >div.descripcion > h2 > a"
+        )
+      )
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Farmacias del niño"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
-}  
+}
 
 async function searchFarGi(med, page) {
   try {
     await page.goto(
-      `https://farmaciasgi.com.mx/?s=`+med+`+&post_type=product`
+      `https://farmaciasgi.com.mx/?s=` + med + `+&post_type=product`
     );
 
     const titles = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("div.cajaProd > h3")
-      ).map((partner) =>
-        partner.innerText.trim()
-      ).splice(0,6)
+      Array.from(document.querySelectorAll("div.cajaProd > h3"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll(".prodDescCorta > b > .amount")
-      ).map((partner) => partner.innerText.trim()).splice(0,6)
+      Array.from(document.querySelectorAll(".prodDescCorta > b > .amount"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
-    
+
     const imgs = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll(
-        ".cajaProd > a > img"
-        )
-     ).map((img) => img.src).splice(0,6)
+      Array.from(document.querySelectorAll(".cajaProd > a > img"))
+        .map((img) => img.src)
+        .splice(0, 6)
     );
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".cajaProd> a")
-      ).map(
-      (partner) => partner.href).splice(0,6)
+      Array.from(document.querySelectorAll(".cajaProd> a"))
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Farmacias Gi"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
-}  
+}
 
 async function searchSup(med, page) {
   try {
-    await page.goto(
-      `https://www.superama.com.mx/buscar/d-farmacia/`+med
-    )
+    await page.goto(`https://www.superama.com.mx/buscar/d-farmacia/` + med);
 
     const titles = await page.evaluate(() =>
-    Array.from(document.querySelectorAll(".text-elipsis.nombreProductoDisplay")
-      ).map((partner) =>
-        partner.innerText.trim()
-      ).splice(0,6)
+      Array.from(
+        document.querySelectorAll(".text-elipsis.nombreProductoDisplay")
+      )
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll("p.upcPrice")
-      ).map((partner) => partner.innerText.trim()).splice(0,6)
+      Array.from(document.querySelectorAll("p.upcPrice"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
-    
+
     const imgs = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll(
-        "img.lazyload"
-        )
-     ).map((img) => img.src).splice(0,6)
+      Array.from(document.querySelectorAll("img.lazyload"))
+        .map((img) => img.src)
+        .splice(0, 6)
     );
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("a.text-elipsis.nombreProductoDisplay")
-       ).map(
-      (partner) => partner.href).splice(0,6)
+      Array.from(
+        document.querySelectorAll("a.text-elipsis.nombreProductoDisplay")
+      )
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Superama"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
 }
 
 async function searchFarSP(med, page) {
   try {
-    await page.goto(
-      `https://www.farmaciasanpablo.com.mx/search/?text=`+med );
+    await page.goto(`https://www.farmaciasanpablo.com.mx/search/?text=` + med);
 
     const titles = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".col-xs-7.col-sm-7.col-md-12> a > p")).map((partner) =>
-          partner.innerText.trim()
-      ).splice(0,6)
+      Array.from(
+        document.querySelectorAll(".col-xs-7.col-sm-7.col-md-12> a > p")
+      )
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
-      Array.from(
-          document.querySelectorAll("p.item-prize")
-      ).map((partner) => partner.innerText.trim()).splice(0,6)
+      Array.from(document.querySelectorAll("p.item-prize"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     for (i = 0; i < prices.length; i++) {
-      prices[i] = (prices[i].split(" ")[0]);
+      prices[i] = prices[i].split(" ")[0];
     }
     await delay(3000);
     const imgs = await page.evaluate(() =>
       Array.from(
-          document.querySelectorAll(
+        document.querySelectorAll(
           ".col-xs-5.col-sm-5.col-md-12.img-wrap > a > img"
-          )
-      ).map((img) => img.src).splice(0,6)
+        )
+      )
+        .map((img) => img.src)
+        .splice(0, 6)
     );
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".col-xs-5.col-sm-5.col-md-12.img-wrap > a")).map(
-          (partner) => partner.href
-      ).splice(0,6)
+      Array.from(
+        document.querySelectorAll(".col-xs-5.col-sm-5.col-md-12.img-wrap > a")
+      )
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Farmacia San Pablo"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
-}  
+}
 async function searchChe(med, page) {
   try {
     await page.goto(
-      `https://www.chedraui.com.mx/search?q=`+med+`%3Arelevance%3Acategory_l_1%3AMC24&text=`+med+`&toggleView=grid`
+      `https://www.chedraui.com.mx/search?q=` +
+        med +
+        `%3Arelevance%3Acategory_l_1%3AMC24&text=` +
+        med +
+        `&toggleView=grid`
     );
 
     const titles = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("a.name")).map((partner) =>
-        partner.innerText.trim()
-      ).splice(0,6)
+      Array.from(document.querySelectorAll("a.name"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll("div.product__list--price-panel")
-      ).map((partner) => partner.innerText.trim()).splice(0,6)
+      Array.from(document.querySelectorAll("div.product__list--price-panel"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
-    
+
     const imgs = await page.evaluate(() =>
       Array.from(
         document.querySelectorAll(
           "div.plp-product-thumb > img:not([class='PLP-promotion-icon'])"
         )
-      ).map((img) => img.src).splice(0,6)
+      )
+        .map((img) => img.src)
+        .splice(0, 6)
     );
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("a.name")).map(
-        (partner) => partner.href
-      ).splice(0,6)
+      Array.from(document.querySelectorAll("a.name"))
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Chedraui"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
 }
@@ -243,14 +260,14 @@ async function searchAmz(med, page) {
     const imgs = [img];
     const links = [link];
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Amazon"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
 }
@@ -279,14 +296,14 @@ async function searchFaho(med, page) {
       )
     );
     let arr = [];
-    arr.push(titles, prices, imgs, links);
+    arr.push(titles, prices, imgs, links, ["Farmacias del ahorro"]);
 
     return arr;
   } catch (e) {
     console.log(e);
     let arrEr = [];
     let arrEmt = [];
-    arrEr.push(arrEmt,arrEmt,arrEmt,arrEmt);
+    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
     return arrEr;
   }
 }
@@ -301,44 +318,54 @@ async function search(m, p) {
   const pC = await searchChe(m, p);
   const pFN = await searchFarN(m, p);
   const pFS = await searchFarSP(m, p);
-  const pS = await searchSup(m,p);
+  const pS = await searchSup(m, p);
   //const pG = await searchFarGi(m,p);
 
-  // const titles = pF[0].concat(pA[0], pC[0]);
-  // const prices = pF[1].concat(pA[1], pC[1]);
-  // const imgs = pF[2].concat(pA[2], pC[2]);
-  // const links = pF[3].concat(pA[3], pC[3]);
-  const titles = pA[0].concat(pC[0],pFS[0],pFN[0],pS[0]);//,pG[0]);
-  const prices = pA[1].concat(pC[1],pFS[1],pFN[1],pS[1]);//,pG[1]);
-  const imgs = pA[2].concat(pC[2],pFS[2],pFN[2],pS[2]);//,pG[2]);
-  const links = pA[3].concat(pC[3],pFS[3],pFN[3],pS[3]);//,pG[3]);
+  const titles = pA[0].concat(pC[0], pFS[0], pFN[0], pS[0]); //,pG[0]);
+  const prices = pA[1].concat(pC[1], pFS[1], pFN[1], pS[1]); //,pG[1]);
+  const imgs = pA[2].concat(pC[2], pFS[2], pFN[2], pS[2]); //,pG[2]);
+  const links = pA[3].concat(pC[3], pFS[3], pFN[3], pS[3]); //,pG[3]);
 
-  for (let i = 0; i < titles.length; i++) {
-    const ob = new Object();
-    ob.desc = titles[i];
-    ob.precio = prices[i];
-    ob.img = imgs[i];
-    ob.link = links[i];
-    prod.push(ob);
+  const resultados = [pA, pC, pFN, pFS, pS];
+
+  for (let i = 0; i < resultados.length; i++) {
+    for (let j = 0; j < resultados[0].length; j++) {
+      let resultado = new Object();
+      resultado.desc = resultados[i][0][j];
+      resultado.precio = resultados[i][1][j];
+      resultado.img = resultados[i][2][j];
+      resultado.link = resultados[i][3][j];
+      resultado.tienda = resultados[i][4][0];
+      prod.push(resultado);
+    }
   }
 
   return prod;
 }
 
-
 function delay(time) {
-  return new Promise(function(resolve) { 
-      setTimeout(resolve, time)
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
   });
 }
+
 async function scrollToBottom(page) {
   const distance = 100; // should be less than or equal to window.innerHeight
   const delay = 100;
-  while (await page.evaluate(() => document.scrollingElement.scrollTop + window.innerHeight < document.scrollingElement.scrollHeight)) {
-    await page.evaluate((y) => { document.scrollingElement.scrollBy(0, y); }, distance);
+  while (
+    await page.evaluate(
+      () =>
+        document.scrollingElement.scrollTop + window.innerHeight <
+        document.scrollingElement.scrollHeight
+    )
+  ) {
+    await page.evaluate((y) => {
+      document.scrollingElement.scrollBy(0, y);
+    }, distance);
     await page.waitFor(delay);
   }
 }
+
 async function getInfo(med, page) {
   try {
     await page.goto("https://quefarmacia.com/medicamentos/" + med + "/");
@@ -351,7 +378,7 @@ async function getInfo(med, page) {
         XPathResult.FIRST_ORDERED_NODE_TYPE,
         null
       ).singleNodeValue;
-      return featureArticle.textContent.split('.')[0];
+      return featureArticle.textContent.split(".")[0];
     });
 
     const usos = await page.evaluate(() => {
