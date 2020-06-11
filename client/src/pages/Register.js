@@ -70,10 +70,15 @@ class Register extends React.Component {
       })
       .then((result) => {
         if (!result.userExists) {
-          fetch(
-            `/create/${this.state.form.email}/${this.state.form.username}/${this.state.form.pass1}`,
-            { method: "POST" }
-          )
+          fetch("/adduser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: this.state.form.username,
+              email: this.state.form.email,
+              password: this.state.form.pass1,
+            }),
+          })
             .then((response) => {
               return response.json();
             })

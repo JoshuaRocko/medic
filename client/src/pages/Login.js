@@ -16,6 +16,7 @@ class Login extends React.Component {
       error: false,
       correct: false,
       tries: 0,
+      session: localStorage.getItem("username"),
     };
   }
 
@@ -25,22 +26,26 @@ class Login extends React.Component {
       loading: true,
       error: false,
     });
-    fetch(`user/${this.state.form.username}`)
-      .then((response) => {
-        return response.json();
+    fetch(`/login/${this.state.form.username}`)
+      .then((res) => {
+        return res.json();
       })
-      .then((result) => {
-        if (result.length === 0) {
+      .then((results) => {
+        if (results.userExists) {
+          const hash = md5(this.state.form.pass);
           this.setState({
             loading: false,
-            error: true,
-            tries: 1,
+            correct: hash === results.result[0].pass,
           });
+          if (this.state.correct) {
+            localStorage.setItem("username", this.state.form.username);
+            this.goHome();
+          }
         } else {
           this.setState({
             loading: false,
-            error: false,
-            correct: md5(this.state.form.pass) === result[0].pass,
+            correct: false,
+            tries: 1,
           });
         }
       });
@@ -55,6 +60,10 @@ class Login extends React.Component {
     });
   };
 
+  goHome = () => {
+    window.location.href = "http://localhost:3000/";
+  };
+
   render() {
     if (this.state.loading === true) {
       return <PageLoading />;
@@ -66,7 +75,6 @@ class Login extends React.Component {
         </div>
       );
     }
-
     return (
       <React.Fragment>
         {this.state.tries > 0 && !this.state.correct && (

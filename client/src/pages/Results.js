@@ -70,8 +70,12 @@ class Results extends React.Component {
         </div>
         <nav className="navbar sticky-top navbar-light bg-light">
           <p className="navbar-brand"></p>
-          <h2 className="card-title text-primar">Resultado de búsqueda de: {this.props.match.params.med} </h2>
-          <div className="form-group row"> &nbsp;&nbsp;&nbsp; Ordenar productos
+          <h2 className="card-title text-primary">
+            Resultados de búsqueda de: {this.props.match.params.med}
+          </h2>
+          <div className="form-group row">
+            {" "}
+            &nbsp;&nbsp;&nbsp; Ordenar productos
             <select
               className="form-control"
               id="filter"
@@ -98,8 +102,11 @@ class Results extends React.Component {
                     alt="Imagen no disponible por el momento"
                   />
                   <div className="card-body">
-                    <h4 className="card-title text-primary" >{result.desc}</h4>
+                    <a className="card-title text-primary" href={result.link}>
+                      {result.desc}
+                    </a>
                     <p className="card-text">Precio: {result.precio}</p>
+                    <p className="card-text">Tienda: {result.tienda}</p>
                   </div>
                   <div className="card-footer text-center">
                     <a
