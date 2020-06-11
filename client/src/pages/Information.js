@@ -1,6 +1,8 @@
 import React from "react";
 import PageLoading from "../components/PageLoading";
 import "./styles/Information.css";
+import { Redirect } from "react-router-dom";
+
 
 class Information extends React.Component {
   constructor(props) {
@@ -25,17 +27,21 @@ class Information extends React.Component {
           error: null,
         });
       });
+
   }
 
   render() {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
+    if (this.state.data.info === undefined){
+      return <Redirect to="/" />; {/* redireccionar a una página de error */}
+    }
     return (
       <React.Fragment>
         <h1 className="title">{this.props.match.params.med.toUpperCase()}</h1>
         <hr />
-        <h5>Consulta a tu médico siempre / NO te automediques / Esta es una Guía informativa</h5>
+        <h6>Consulta a tu médico siempre / NO te automediques / Esta es una Guía informativa</h6>{/* alinear al centro */}
         <p className="info">{this.state.data.info}</p>
         <div className="info">
           <h3>Usos más comúnes</h3>
@@ -80,7 +86,7 @@ class Information extends React.Component {
         <h6>
           Para más información visita:
         </h6>
-        <p><a href={'https://quefarmacia.com/medicamentos/' + this.props.match.params.med}>https://quefarmacia.com/medicamentos/{this.props.match.params.med}</a></p>
+        {/* <p><a href={'https://quefarmacia.com/medicamentos/' + this.props.match.params.med}>https://quefarmacia.com/medicamentos/{this.props.match.params.med}</a></p> */}
         </div>
         <div className></div>
       </React.Fragment>

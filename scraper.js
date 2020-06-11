@@ -321,6 +321,14 @@ async function search(m, p) {
     ob.link = links[i];
     prod.push(ob);
   }
+    if(!prod || 0 === prod.length){
+      const ob = new Object();
+      ob.desc = [];
+      ob.precio = [];
+      ob.img = [];
+      //ob.link = [];
+      prod.push(ob);
+  }
 
   return prod;
 }
@@ -408,7 +416,13 @@ async function getInfo(med, page) {
     return ob;
   } catch (e) {
     console.log(e);
-    return null;
+    const ob = new Object();
+    //ob.info = []; //Array de Strings (info)
+    ob.usos = [];
+    ob.contradicciones = [];
+    ob.ad = [];
+    console.log(ob.info);
+    return ob;
   }
 }
 

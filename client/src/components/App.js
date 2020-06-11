@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Information from "../pages/Information";
+import ErrorM from "../pages/ErrorM";
 
 function App(props) {
   return (
@@ -19,6 +20,7 @@ function App(props) {
           <Route exact path="/Registration/" component={Register} />
           <Route exact path="/Login" component={Login} />
           <Route exact path="/information/:med" component={Information}></Route>
+          <Route exact path="/medicamento-no-encontrado/:med" component={ErrorM}></Route>
         </Switch>
       </BrowserRouter>
     </React.Fragment>

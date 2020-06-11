@@ -2,6 +2,7 @@ import React from "react";
 import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class Results extends React.Component {
   constructor(props) {
@@ -57,6 +58,7 @@ class Results extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
+    
     return (
       <React.Fragment>
         <div className="alert alert-primary" role="alert">
@@ -67,7 +69,8 @@ class Results extends React.Component {
           </p>
         </div>
         <nav className="navbar sticky-top navbar-light bg-light">
-          <p className="navbar-brand"></p><h2 className="card-title text-primary">Resultados de búsqueda de: {this.props.match.params.med}</h2  >
+          <p className="navbar-brand"></p>
+          <h2 className="card-title text-primar">Resultado de búsqueda de: {this.props.match.params.med} </h2>
           <div className="form-group row"> &nbsp;&nbsp;&nbsp; Ordenar productos
             <select
               className="form-control"
@@ -83,6 +86,9 @@ class Results extends React.Component {
         <div className="container">
           <div className="card-columns">
             {this.state.data.map((result) => {
+              if (result.link === undefined){
+                return <Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />; {/* redireccionar a una página de error */}
+              }
               return (
                 <div key={result.link} className="card mb-3">
                   <img
@@ -92,7 +98,7 @@ class Results extends React.Component {
                     alt="Imagen no disponible por el momento"
                   />
                   <div className="card-body">
-                    <a className="card-title text-primary" href={result.link}>{result.desc}</a>
+                    <h4 className="card-title text-primary" >{result.desc}</h4>
                     <p className="card-text">Precio: {result.precio}</p>
                   </div>
                   <div className="card-footer text-center">
