@@ -32,14 +32,20 @@ class Login extends React.Component {
       })
       .then((results) => {
         if (results.userExists) {
+          console.log("idUSer", results.result[0].idUser);
           const hash = md5(this.state.form.pass);
           this.setState({
             loading: false,
+            asdfasd: "asdfa",
             correct: hash === results.result[0].pass,
+            idUser: results.result[0].idUser,
           });
           if (this.state.correct) {
             localStorage.setItem("username", this.state.form.username);
-            this.goHome();
+            localStorage.setItem("idUser", this.state.idUser);
+            console.log(localStorage.getItem("username"));
+            console.log(localStorage.getItem("idUser"));
+            //this.goHome();
           }
         } else {
           this.setState({
@@ -60,9 +66,9 @@ class Login extends React.Component {
     });
   };
 
-  goHome = () => {
-    window.location.href = "http://localhost:3000/";
-  };
+  // goHome = () => {
+  //   window.location.href = "http://localhost:3000/";
+  // };
 
   render() {
     if (this.state.loading === true) {
