@@ -86,7 +86,7 @@ class Information extends React.Component {
         <h6>
           Para más información visita:
         </h6>
-        {/* <p><a href={'https://quefarmacia.com/medicamentos/' + this.props.match.params.med}>https://quefarmacia.com/medicamentos/{this.props.match.params.med}</a></p> */}
+        <p><a href={'https://quefarmacia.com/medicamentos/' + this.props.match.params.med}>https://quefarmacia.com/medicamentos/{this.props.match.params.med}</a></p>
         </div>
         <div className></div>
       </React.Fragment>

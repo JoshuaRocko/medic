@@ -17,4 +17,9 @@
   float: right;
   color: white;
   font-size: 2rem;
+  padding-top: 22px;
+}
+
+h1{
+  font-size: 3vw
 }
