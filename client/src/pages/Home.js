@@ -3,7 +3,6 @@ import "./styles/Home.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { config } from "@fortawesome/fontawesome-svg-core";
 
 class Home extends React.Component {
   constructor(props) {
