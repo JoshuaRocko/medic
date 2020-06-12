@@ -105,7 +105,7 @@ class Results extends React.Component {
                     <a className="card-title text-primary" href={result.link}>
                       {result.desc}
                     </a>
-                    <p className="card-text">Precio: {result.precio}</p>
+                    <p className="card-text">Precio: ${result.precio}</p>
                     <p className="card-text">Tienda: {result.tienda}</p>
                   </div>
                   <div className="card-footer text-center">

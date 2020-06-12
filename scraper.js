@@ -3,7 +3,7 @@ async function searchFarN(med, page) {
   try {
     await page.goto(`https://farmaciasdelnino.mx/esp/items/?kw=` + med);
     await scrollToBottom(page);
-    await delay(3000);
+    await delay(5000);
 
     const titles = await page.evaluate(() =>
       Array.from(
@@ -20,7 +20,7 @@ async function searchFarN(med, page) {
           "div#catalogo > .productos > div.precio .oferta, div#catalogo > .productosultimo > div.precio .oferta "
         )
       )
-        .map((partner) => partner.innerText.trim())
+        .map((partner) => partner.innerText.trim().replace(/[^0-9.]/gi, ""))
         .splice(0, 6)
     );
 
@@ -55,44 +55,8 @@ async function searchFarN(med, page) {
   }
 }
 
-async function searchFarGi(med, page) {
-  try {
-    await page.goto(
-      `https://farmaciasgi.com.mx/?s=` + med + `+&post_type=product`
-    );
-
-    const titles = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("div.cajaProd > h3"))
-        .map((partner) => partner.innerText.trim())
-        .splice(0, 6)
-    );
-    const prices = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".prodDescCorta > b > .amount"))
-        .map((partner) => partner.innerText.trim())
-        .splice(0, 6)
-    );
-
-    const imgs = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".cajaProd > a > img"))
-        .map((img) => img.src)
-        .splice(0, 6)
-    );
-    const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".cajaProd> a"))
-        .map((partner) => partner.href)
-        .splice(0, 6)
-    );
-    let arr = [];
-    arr.push(titles, prices, imgs, links, ["Farmacias Gi"]);
-
-    return arr;
-  } catch (e) {
-    console.log(e);
-    let arrEr = [];
-    let arrEmt = [];
-    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
-    return arrEr;
-  }
+function containsTwoDots(str) { 
+  return str.indexOf('.') != str.lastIndexOf('.'); 
 }
 
 async function searchSup(med, page) {
@@ -108,9 +72,17 @@ async function searchSup(med, page) {
     );
     const prices = await page.evaluate(() =>
       Array.from(document.querySelectorAll("p.upcPrice"))
-        .map((partner) => partner.innerText.trim())
+        .map((partner) => partner.innerText.trim().replace(/[^0-9.]/gi, ""))
         .splice(0, 6)
     );
+
+    for(var i =0;i<prices.length;i++){
+      if(containsTwoDots(prices[i])){
+        prices[i] = prices[i].substring(prices[i].indexOf(".")+1);
+        prices[i] = prices[i].substring(2);
+      }
+    }
+
 
     const imgs = await page.evaluate(() =>
       Array.from(document.querySelectorAll("img.lazyload"))
@@ -150,7 +122,7 @@ async function searchFarSP(med, page) {
     );
     const prices = await page.evaluate(() =>
       Array.from(document.querySelectorAll("p.item-prize"))
-        .map((partner) => partner.innerText.trim())
+        .map((partner) => partner.innerText.trim().replace(/[^0-9.]/gi, ""))
         .splice(0, 6)
     );
     for (i = 0; i < prices.length; i++) {
@@ -202,7 +174,7 @@ async function searchChe(med, page) {
     );
     const prices = await page.evaluate(() =>
       Array.from(document.querySelectorAll("div.product__list--price-panel"))
-        .map((partner) => partner.innerText.trim())
+        .map((partner) => partner.innerText.trim().replace(/[^0-9.]/gi, ""))
         .splice(0, 6)
     );
 
@@ -233,67 +205,29 @@ async function searchChe(med, page) {
   }
 }
 
-async function searchAmz(med, page) {
-  try {
-    await page.goto(
-      "https://www.amazon.com.mx/s?k=" +
-        med +
-        "&i=hpc&rh=n%3A9482610011%2Cn%3A9845666011&dc&__mk_es_MX=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2R9XBQJTG9UO6&qid=1588095115&rnid=9482611011&sprefix=ibu%2Chpc%2C247&ref=sr_nr_n_10"
-    );
-    const title = await page.evaluate(
-      () => document.querySelector("h2").innerText
-    );
-    const img = await page.evaluate(
-      () =>
-        document.querySelector(
-          ".a-section.aok-relative.s-image-square-aspect > img"
-        ).src
-    );
-    const price = await page.evaluate(() =>
-      document.querySelector(".a-offscreen").innerText.trim()
-    );
-    const link = await page.evaluate(
-      () => document.querySelector("h2").children[0].href
-    );
-    const titles = [title];
-    const prices = [price];
-    const imgs = [img];
-    const links = [link];
-    let arr = [];
-    arr.push(titles, prices, imgs, links, ["Amazon"]);
-
-    return arr;
-  } catch (e) {
-    console.log(e);
-    let arrEr = [];
-    let arrEmt = [];
-    arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt);
-    return arrEr;
-  }
-}
 async function searchFaho(med, page) {
   try {
     await page.goto("https://www.fahorro.com/catalogsearch/result/?q=" + med);
     const titles = await page.evaluate(() =>
       Array.from(
         document.querySelectorAll(".product-shop > h2")
-      ).map((partner) => partner.innerText.trim())
+      ).map((partner) => partner.innerText.trim()).splice(0, 6)
     );
     const prices = await page.evaluate(() =>
       Array.from(document.querySelectorAll(".price")).map((partner) =>
-        partner.innerText.trim()
-      )
+        partner.innerText.trim().replace(/[^0-9.]/gi, "")
+      ).splice(0, 6)
     );
     const imgs = await page.evaluate(() =>
       Array.from(document.querySelectorAll(".product-image > img")).map(
         (img) => img.src
-      )
+      ).splice(0, 6)
     );
 
     const links = await page.evaluate(() =>
       Array.from(document.querySelectorAll(".product-name > a")).map(
         (partner) => partner.href
-      )
+      ).splice(0, 6)
     );
     let arr = [];
     arr.push(titles, prices, imgs, links, ["Farmacias del ahorro"]);
@@ -313,20 +247,20 @@ async function search(m, p) {
   m = m.replace(/ /g, "+");
   let prod = [];
 
-  const pA = await searchFaho(m, p);
-  //const pA = await searchAmz(m, p);
+  //const pA = await searchFaho(m, p);
+  const pA = await searchSup(m, p);
   const pC = await searchChe(m, p);
   const pFN = await searchFarN(m, p);
   const pFS = await searchFarSP(m, p);
-  const pS = await searchSup(m, p);
+  //const pS = await searchSup(m, p);
   //const pG = await searchFarGi(m,p);
 
-  const titles = pA[0].concat(pC[0], pFS[0], pFN[0], pS[0]); //,pG[0]);
-  const prices = pA[1].concat(pC[1], pFS[1], pFN[1], pS[1]); //,pG[1]);
-  const imgs = pA[2].concat(pC[2], pFS[2], pFN[2], pS[2]); //,pG[2]);
-  const links = pA[3].concat(pC[3], pFS[3], pFN[3], pS[3]); //,pG[3]);
+  const titles = pA[0].concat(pC[0], pFS[0], pFN[0]);//, pS[0]); //,pG[0]);
+  const prices = pA[1].concat(pC[1], pFS[1], pFN[1]);//, pS[1]); //,pG[1]);
+  const imgs = pA[2].concat(pC[2], pFS[2], pFN[2]);//, pS[2]); //,pG[2]);
+  const links = pA[3].concat(pC[3], pFS[3], pFN[3]);//, pS[3]); //,pG[3]);
 
-  const resultados = [pA, pC, pFN, pFS, pS];
+  const resultados = [pA, pC, pFN, pFS];//, pS];
 
   for (let i = 0; i < resultados.length; i++) {
     for (let j = 0; j < resultados[0].length; j++) {

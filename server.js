@@ -25,8 +25,19 @@ let p;
 })();
 
 app.get("/search/:med", async (req, res) => {
-  const data = await scraper.search(req.params.med, p);
-  res.json(data);
+  
+  await insertaMed(req.params.med);
+  
+  pool.query(
+    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
+    (error, result) => {
+      if (error) throw error;
+      //console.log(result);
+      res.json(result)
+    }
+  );
+  //console.log(data);
+  //res.end();
 });
 
 app.get("/info/:med", async (req, res) => {
@@ -75,6 +86,64 @@ app.get("/login/:username", (req, res) => {
   );
 });
 
+
+function existeMed(med) {
+  return new Promise((resolve, reject)=> {
+      pool.query(`select idMed from medicamento where nombreMed =lower('${med}')`,
+      (error, result) => {
+        if (error) throw error;
+        console.log(result);
+        if (!result.length)
+          return 0;
+        else return 1;
+      });
+  })
+}
+
+async function insertaMed(med){
+  var rows;
+  console.log("pregunta si existe med en base");
+  // await pool.query(
+  //   `select idMed from medicamento where nombreMed =lower('${med}')`,
+  //   (error, result) => {
+  //     if (error) throw error;
+  //     console.log(result);
+  //     rows = result.length;
+  //   }
+  // );
+  //
+  
+  //rows = await existeMed();
+
+  console.log("rows",rows);
+  //if(rows == 0){ ///////////
+    console.log("no exixste ");
+    pool.query(
+      `insert into medicamento (nombreMed) values ('${med}')`,
+      (error, result) => {
+        if (error) throw error;
+        console.log(result);
+      }
+    );
+    const data = await scraper.search(med, p);
+    for (var i = 0; i < data.length; i++){
+      var obj = data[i];
+      var datos = [];
+      for (var key in obj){
+        var value = obj[key];
+        datos.push(value);
+      }
+      pool.query(
+        `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
+        (error, result) => {
+          if (error) throw error;
+          console.log(result);
+        }
+      );
+      datos = [];
+    }
+ // }
+}
 /* CONFIG EXPRESS */
 
 const port = 5000;

@@ -56,13 +56,9 @@ class Nav extends React.Component {
             <React.Fragment>
             
             <div className="navbar-nav ml-auto">
-            
-            <h1 className="user" align="center">{this.state.session}</h1>
+            <div className="user" align="center">{this.state.session}</div>
               <button onClick={this.logout} className="btn btn-primary btn-lg">Cerrar session</button>
-              </div>
-              <div className="user">Id: {this.state.idSession}</div>
-              <div className="user">{this.state.session}</div>
-              <button onClick={this.logout}>Logout</button>
+              </div> 
             </React.Fragment>
           )}
         </nav>

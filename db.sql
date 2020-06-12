@@ -19,13 +19,15 @@ create table medicamento (
 drop table if exists producto;
 create table producto(
 	idProd int not null primary key auto_increment,
-   	nombreProd varchar(64) not null,
-	precio int,
+   	nombreProd varchar(128) not null,
+	precio varchar(16),
 	srcImgProd varchar(255),
 	srcUrlProd varchar(255),
 	idMed int not null,
+	tiendavarchar(64),
 	FOREIGN KEY (idMed)REFERENCES medicamento(idMed)
 );
+
 
 drop table if exists likes;
 create table likes(
