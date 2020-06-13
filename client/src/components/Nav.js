@@ -29,7 +29,7 @@ class Nav extends React.Component {
 
     return (
       <React.Fragment>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-medic">
           <Link to="/" className="navbar-brand">
             <h1>Medic Scraper</h1>
           </Link>
@@ -44,7 +44,7 @@ class Nav extends React.Component {
               </button>
               <div className={"collapse navbar-collapse " + show}>
                 <div className="navbar-nav ml-auto">
-                  <Link to="/Login" className="btn btn-primary btn-lg">
+                  <Link to="/Login" className="btn btn-login btn-lg">
                     Iniciar sesi&oacute;n
                   </Link>
                 </div>
@@ -55,7 +55,7 @@ class Nav extends React.Component {
             <React.Fragment>
               <div className="navbar-nav ml-auto">
                 <div className="user" align="center">{this.state.session}</div>
-                <button onClick={this.logout} className="btn btn-primary btn-lg">Cerrar session</button>
+                <button onClick={this.logout} className="btn btn-login btn-lg">Cerrar session</button>
               </div> 
             </React.Fragment>
           )}

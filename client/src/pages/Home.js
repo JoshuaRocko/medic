@@ -18,12 +18,18 @@ class Home extends React.Component {
     });
   };
 
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.props.history.push(`/results/${this.state.med}`);
+    }
+  }
+  
   render() {
     return (
       <div className="fondo">
         <div className="d-flex align-items-center flex-column">
           <p className="titlehome">Medic Scraper</p>
-          <h3>Buscar medicamento</h3>
+          <p className="text-shadow">Buscar medicamento</p>
           <div className="d-flex align-items-center">
             <input
               className="in"
@@ -31,6 +37,7 @@ class Home extends React.Component {
               placeholder="Teclea el nombre del medicamento"
               onChange={this.handleInput}
               value={this.state.med}
+              onKeyPress={this.handleKeyPress}
             />
             <Link to={`/results/${this.state.med}`}>
               <FontAwesomeIcon icon={faSearch} size="3x" />
