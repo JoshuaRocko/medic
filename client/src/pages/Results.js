@@ -122,7 +122,47 @@ class Results extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
+    
+    let regreso = [];
+    let cardG = [];
+    this.state.data.map((result, i) => {
+      if (result.link === undefined) {
+        regreso = <Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />; {/* redireccionar a una página de error */ }
+      }
+      if (i % 4 == 0) {
+        regreso.push(<div className="card-deck">{cardG}</div>);
+        cardG = [];
+      }
 
+       cardG.push(<div key={result.link} className="card mb-3">
+          <img
+            href={result.link}
+            className="card-img-top imagen"
+            src={result.img}
+            alt="Imagen no disponible por el momento"
+          />
+          <div className="card-body">
+            <a className="card-title text-primary" href={result.link}>
+              {result.desc}
+            </a>
+            <p className="card-text">Precio: {result.precio}</p>
+            <p className="card-text">Tienda: {result.tienda}</p>
+          </div>
+          <span onClick={() => myFunction(result.idm)}>
+                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
+                    </span>
+          <div className="card-footer text-center">
+            <a
+              href={result.link}
+              className="btn btn-dark"
+              target="blank"
+            >
+              Ir al sitio
+              </a>
+          </div>
+        </div>
+      );
+    });
     return (
       <React.Fragment>
         <div className="alert alert-primary" role="alert">
@@ -153,55 +193,7 @@ class Results extends React.Component {
           </div>
         </nav>
         <div className="container">
-          <div className="card-columns">
-            {this.state.data.map((result) => {
-              if (result.link === undefined) {
-                return (
-                  <Redirect
-                    to={
-                      "/medicamento-no-encontrado/" +
-                      this.props.match.params.med
-                    }
-                  />
-                );
-                {
-                  /* redireccionar a una página de error */
-                }
-              }
-              return (
-                
-                <div key={result.link} className="card mb-3">
-                {console.log(result.idm)}
-                  <img
-                    href={result.link}
-                    className="card-img-top imagen"
-                    src={result.img}
-                    alt="Imagen no disponible por el momento"
-                  />
-                  <div className="card-body">
-                    <a className="card-title text-primary" href={result.link}>
-                      {result.desc}
-                    </a>
-                    <p className="card-text">Precio: ${result.precio}</p>
-                    <p className="card-text">Tienda: {result.tienda}</p>
-                  </div>
-
-                  <span onClick={() => myFunction(result.idm)}>
-                    <button class="button">Agregar a\nfavoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
-                    </span>
-                  <div className="card-footer text-center">
-                    <a
-                      href={result.link}
-                      className="btn btn-dark"
-                      target="blank"
-                    >
-                      Ir al sitio
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {regreso}
         </div>
       </React.Fragment>
     );
