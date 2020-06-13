@@ -60,6 +60,18 @@ app.post("/adduser", (req, res) => {
   );
 });
 
+app.post("/addhistory", (req, res) => {
+  const userid = req.body.username;
+  const med = req.body.med;
+  pool.query(
+    `insert into historial (idMed, idUser) values ((select idMed from medicamento where nombreMed = lower('${med}')), ${userid})`,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );
+});
+
 app.get("/verifyuser/:username/:email", (req, res) => {
   pool.query(
     `select * from users where (username=lower('${req.params.username}') or email=lower('${req.params.email}'))`,
@@ -116,7 +128,7 @@ async function insertaMed(med){
   //rows = await existeMed();
 
   console.log("rows",rows);
-  //if(rows == 0){ ///////////
+  if(rows == 0){ ///////////
     console.log("no exixste ");
     pool.query(
       `insert into medicamento (nombreMed) values ('${med}')`,
@@ -142,7 +154,7 @@ async function insertaMed(med){
       );
       datos = [];
     }
- // }
+  }
 }
 /* CONFIG EXPRESS */
 

@@ -12,6 +12,7 @@ class Results extends React.Component {
       error: null,
       data: undefined,
       filter: 1,
+      idSession: localStorage.getItem("idUser"),
     };
 
     this.changeFilter = this.changeFilter.bind(this);
@@ -23,6 +24,19 @@ class Results extends React.Component {
         return response.json();
       })
       .then((data) => this.setState({ data, loading: false }));
+      if(this.state.idSession != null){
+        fetch("/addhistory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: this.state.idSession,
+            med: this.props.match.params.med,
+          }),
+        })
+          .then((response) => {
+            return response.json();
+          })
+      }
   }
 
   changeFilter(event) {

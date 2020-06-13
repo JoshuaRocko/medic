@@ -18,7 +18,7 @@ class Nav extends React.Component {
   }
 
   logout = (e) => {
-    localStorage.removeItem("user");
+    localStorage.clear();
     this.setState({
       session: window.localStorage.getItem("user"),
     });
