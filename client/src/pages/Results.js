@@ -10,9 +10,11 @@ class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      med: props.match.params.med,
       loading: true,
       error: null,
-      data: undefined,
+      data: [],
+      idMed: 0,
       filter: 1,
       idSession: localStorage.getItem("idUser"),
     };
@@ -21,11 +23,24 @@ class Results extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`/search/${this.props.match.params.med}`)
+    this.fetchData();
+  }
+
+  fetchData = () => {
+    fetch(`/existeMed/${this.state.med}`)
       .then((response) => {
         return response.json();
       })
-      .then((data) => this.setState({ data, loading: false }));
+      .then((resultado) => {
+        console.log(resultado);
+        if (resultado.length > 0) {
+          this.setState({ idMed: resultado[0].idMed });
+          this.getData();
+        } else {
+          this.setState({ idMed: 0 });
+          this.scrapeData();
+        }
+      });
       if(this.state.idSession != null){
         fetch("/addhistory", {
           method: "POST",
@@ -39,8 +54,28 @@ class Results extends React.Component {
             return response.json();
           })
       }
-  }
-  
+  };
+
+  getData = () => {
+    fetch(`/getProducts/${this.state.med}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ data, loading: false });
+      });
+  };
+
+  scrapeData = () => {
+    fetch(`/scrapeProducts/${this.state.med}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ data, loading: false });
+      });
+  };
+
   changeFilter(event) {
     this.setState({ filter: event.target.value });
     console.log(this.state.filter);
@@ -87,7 +122,7 @@ class Results extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
-    
+
     return (
       <React.Fragment>
         <div className="alert alert-primary" role="alert">
@@ -120,8 +155,18 @@ class Results extends React.Component {
         <div className="container">
           <div className="card-columns">
             {this.state.data.map((result) => {
-              if (result.link === undefined){
-                return <Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />; {/* redireccionar a una página de error */}
+              if (result.link === undefined) {
+                return (
+                  <Redirect
+                    to={
+                      "/medicamento-no-encontrado/" +
+                      this.props.match.params.med
+                    }
+                  />
+                );
+                {
+                  /* redireccionar a una página de error */
+                }
               }
               return (
                 <div key={result.link} className="card mb-3">
