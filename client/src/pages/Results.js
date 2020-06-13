@@ -24,6 +24,19 @@ class Results extends React.Component {
 
   componentDidMount() {
     this.fetchData();
+    /*if(this.state.idSession != null){ // si el usuario esta registrado
+      fetch("/addhistory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: this.state.idSession,
+          med: this.props.match.params.med,
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+    }*/
   }
 
   fetchData = () => {
@@ -41,19 +54,6 @@ class Results extends React.Component {
           this.scrapeData();
         }
       });
-      if(this.state.idSession != null){
-        fetch("/addhistory", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: this.state.idSession,
-            med: this.props.match.params.med,
-          }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-      }
   };
 
   getData = () => {
@@ -187,7 +187,7 @@ class Results extends React.Component {
                   </div>
 
                   <span onClick={() => myFunction(result.idm)}>
-                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
+                    <button class="button">Agregar a\nfavoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
                     </span>
                   <div className="card-footer text-center">
                     <a
