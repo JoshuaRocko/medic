@@ -11,7 +11,6 @@ import ErrorM from "../pages/ErrorM";
 
 function App(props) {
   return (
-    <React.Fragment>
       <BrowserRouter>
         <Nav />
         <Switch>
@@ -23,7 +22,6 @@ function App(props) {
           <Route exact path="/medicamento-no-encontrado/:med" component={ErrorM}></Route>
         </Switch>
       </BrowserRouter>
-    </React.Fragment>
   );
 }
 

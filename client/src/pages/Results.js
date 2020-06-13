@@ -15,7 +15,7 @@ class Results extends React.Component {
       error: null,
       data: [],
       idMed: 0,
-      filter: 1,
+      filter: "true",
       idSession: localStorage.getItem("idUser"),
     };
 
@@ -77,35 +77,33 @@ class Results extends React.Component {
   };
 
   changeFilter(event) {
+    console.log(this.state.filter);
     this.setState({ filter: event.target.value });
     console.log(this.state.filter);
     let aux = this.state.data;
+/*
+    for (let x = 0; x < aux.length; x++) {
+      for (let i = 0; i < aux.length-x-1; i++) {
+          if(aux[i] < aux[i+1]){
+              let tmp = aux[i+1];
+              aux[i+1] = aux[i];
+              aux[i] = tmp;
+          }
+      }
+  }*/
     const dataOrdered = aux.sort((a, b) => {
-      let precioA = a.precio.split("$");
-      let precioB = b.precio.split("$");
-      console.log("::::::::::", aux);
-      if (this.state.filter === 1) return precioB[1] - precioA[1];
-      else return precioA[1] - precioB[1];
+      //console.log(a, b);
+      let precioA = a.precio;
+      let precioB = b.precio;
+      //console.log("::::::::::", aux);
+      if (this.state.filter == "true") return precioB - precioA;
+      else return precioA - precioB;
       //return precioA[1] > precioB[1] ? 1 : precioA[1] < precioB[1] ? -1 : 0;
     });
     this.setState({ data: dataOrdered });
-    /* } else {
-      const dataOrdered = this.state.data.sort((a, b) => {
-        let precioA = a.precio.split("$");
-        let precioB = b.precio.split("$");
-        return precioA[1] - precioB[1]
-        //return precioA[1] < precioB[1] ? 1 : precioA[1] > precioB[1] ? -1 : 0;
-      });
-      this.setState({ data: dataOrdered });
-    }
-    console.log(this.state.data);*/
   }
-
-  /*<form className="form-inline">
-            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>*/
-  render() {
+  
+render() {
     function myFunction(precio) {
       //console.log("precio es",precio);
       if(localStorage.getItem("idUser") == undefined){
@@ -161,14 +159,14 @@ class Results extends React.Component {
     let cardG = [];
     this.state.data.map((result, i) => {
       if (result.link === undefined) {
-        regreso = <Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />; {/* redireccionar a una página de error */ }
+        regreso.push(<Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />); {/* redireccionar a una página de error */ }
       }
       if (i % 4 == 0) {
-        regreso.push(<div className="card-deck">{cardG}</div>);
+        regreso.push(<div className="card-deck" key={i}>{cardG}</div>);
         cardG = [];
       }
 
-       cardG.push(<div key={result.link} className="card mb-3">
+       cardG.push(<div key={i} className="card mb-3">
           <img
             href={result.link}
             className="card-img-top imagen"
@@ -179,12 +177,9 @@ class Results extends React.Component {
             <a className="card-title text-primary" href={result.link}>
               {result.desc}
             </a>
-            <p className="card-text">Precio: {result.precio}</p>
+            <p className="card-text">Precio: ${result.precio}</p>
             <p className="card-text">Tienda: {result.tienda}</p>
           </div>
-          <span onClick={() => myFunction(result.idm)}>
-                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
-                    </span>
           <div className="card-footer text-center">
             <a
               href={result.link}
@@ -193,6 +188,9 @@ class Results extends React.Component {
             >
               Ir al sitio
               </a>
+              <span onClick={() => myFunction(result.idm)}>
+                    <button className="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
+                    </span>
           </div>
         </div>
       );
@@ -217,12 +215,12 @@ class Results extends React.Component {
             &nbsp;&nbsp;&nbsp; Ordenar productos
             <select
               className="form-control"
-              id="filter"
+        
               onChange={this.changeFilter}
               value={this.state.filter}
             >
-              <option value="1">De menor a mayor</option>
-              <option value="2">De mayor a menor</option>
+              <option value="true">De menor a mayor</option>
+              <option value="false">De mayor a menor</option>
             </select>
           </div>
         </nav>

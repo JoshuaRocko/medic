@@ -5,13 +5,18 @@
 .titlehome {
   font-size: 5rem;
   font-style: italic;
-  color: aliceblue;
+  color: #457ABF;
+}
+
+.text-shadow{
+  color:  #457ABF;;
+  font-size: 2rem;
 }
 
 .in {
   width: 300px;
   height: 50px;
-  border: 3px solid #00b4cc;
+  border: 3px solid #457ABF;
   padding: 5px;
   border-radius: 5px 0 0 5px;
   outline: none;
@@ -19,7 +24,6 @@
 }
 
 .fondo {
-  background-color: #008ec8;
-  background-image: linear-gradient(to bottom right, #333272, #00b4cc);
-  padding-bottom: 100%;
+  background-color: #fff;
+  height:100vh;
 }

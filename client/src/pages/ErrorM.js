@@ -17,6 +17,12 @@ class ErrorM extends React.Component {
     };
   }
 
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.props.history.push(`/results/${this.state.med}`);
+    }
+  }
+
   handleInput = (event) => {
     this.setState({
       med: event.target.value,
@@ -58,6 +64,7 @@ class ErrorM extends React.Component {
               placeholder="Teclea el nombre del medicamento"
               onChange={this.handleInput}
               value={this.state.med}
+              onKeyPress={this.handleKeyPress}
             />
             <Link to={`/results/${this.state.med}`}>
               <FontAwesomeIcon icon={faSearch} size="3x" />
