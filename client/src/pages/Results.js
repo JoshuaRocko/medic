@@ -3,6 +3,8 @@ import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 class Results extends React.Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class Results extends React.Component {
           })
       }
   }
-
+  
   changeFilter(event) {
     this.setState({ filter: event.target.value });
     console.log(this.state.filter);
@@ -69,6 +71,19 @@ class Results extends React.Component {
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>*/
   render() {
+    function myFunction(precio) {
+      //var value = 
+      console.log("precio es",precio);
+      if(localStorage.getItem("idUser") == undefined){
+        console.log("no user loged in");
+      }else{
+        
+        console.log("user",localStorage.getItem("idUser"),"liked product",precio);
+
+      }
+      document.getElementById(precio).style.color = "blue";
+      
+      }
     if (this.state.loading === true) {
       return <PageLoading />;
     }
@@ -79,6 +94,7 @@ class Results extends React.Component {
           <p className="mb-0">
             <Link to={`/information/${this.props.match.params.med}`}>
               Ver información del medicamento
+              
             </Link>
           </p>
         </div>
@@ -122,6 +138,9 @@ class Results extends React.Component {
                     <p className="card-text">Precio: ${result.precio}</p>
                     <p className="card-text">Tienda: {result.tienda}</p>
                   </div>
+                  <span onClick={() => myFunction(result.id)}>
+                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.id} data="0" /></button>
+                    </span>
                   <div className="card-footer text-center">
                     <a
                       href={result.link}

@@ -29,7 +29,7 @@ app.get("/search/:med", async (req, res) => {
   await insertaMed(req.params.med);
   
   pool.query(
-    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
+    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda, idProd as id FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
     (error, result) => {
       if (error) throw error;
       //console.log(result);
