@@ -169,7 +169,9 @@ class Results extends React.Component {
                 }
               }
               return (
+                
                 <div key={result.link} className="card mb-3">
+                {console.log(result.idm)}
                   <img
                     href={result.link}
                     className="card-img-top imagen"
@@ -183,8 +185,9 @@ class Results extends React.Component {
                     <p className="card-text">Precio: ${result.precio}</p>
                     <p className="card-text">Tienda: {result.tienda}</p>
                   </div>
-                  <span onClick={() => myFunction(result.id)}>
-                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.id} data="0" /></button>
+
+                  <span onClick={() => myFunction(result.idm)}>
+                    <button class="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
                     </span>
                   <div className="card-footer text-center">
                     <a

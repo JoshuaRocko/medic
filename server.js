@@ -24,25 +24,6 @@ let p;
   });
 })();
 
-<<<<<<< HEAD
-app.get("/search/:med", async (req, res) => {
-  
-  await insertaMed(req.params.med);
-  
-  pool.query(
-    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda, idProd as id FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
-    (error, result) => {
-      if (error) throw error;
-      //console.log(result);
-      res.json(result)
-    }
-  );
-  //console.log(data);
-  //res.end();
-});
-
-=======
->>>>>>> b492828a533532952a70dfc90424eec277e648a9
 app.get("/info/:med", async (req, res) => {
   const info = await scraper.getInfo(req.params.med, p);
   res.json(info);
@@ -114,7 +95,7 @@ app.get("/existeMed/:med", (req, res) => {
 
 app.get("/getProducts/:med", async (req, res) => {
   pool.query(
-    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
+    `SELECT nombreProd as 'desc', precio, srcImgProd as img, srcUrlProd as link, tienda, idProd as idm FROM producto where idMed = (select idMed from medicamento where nombreMed = '${req.params.med}');`,
     (error, result) => {
       if (error) throw error;
       console.log(result);
@@ -130,26 +111,6 @@ app.get("/scrapeProducts/:med", async (req, res) => {
   res.send(data);
 });
 
-<<<<<<< HEAD
-async function insertaMed(med){
-  let rows;
-  console.log("pregunta si existe med en base");
-  // await pool.query(
-  //   `select idMed from medicamento where nombreMed =lower('${med}')`,
-  //   (error, result) => {
-  //     if (error) throw error;
-  //     console.log(result);
-  //     rows = result.length;
-  //   }
-  // );
-  //
-  
-  //rows = await existeMed();
-
-  console.log("rows",rows);
-  if(rows == 0){ ///////////
-    console.log("no exixste ");
-=======
 async function insertaMed(data, med) {
   pool.query(
     `insert into medicamento (nombreMed) values ('${med}')`,
@@ -165,35 +126,14 @@ async function insertaMed(data, med) {
       let value = obj[key];
       datos.push(value);
     }
->>>>>>> b492828a533532952a70dfc90424eec277e648a9
     pool.query(
-      `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
+      `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
       (error, result) => {
         if (error) throw error;
         console.log(result);
       }
     );
-<<<<<<< HEAD
-    const data = await scraper.search(med, p);
-    for (var i = 0; i < data.length; i++){
-      var obj = data[i];
-      var datos = [];
-      for (var key in obj){
-        var value = obj[key];
-        datos.push(value);
-      }
-      pool.query(
-        `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
-        (error, result) => {
-          if (error) throw error;
-          console.log(result);
-        }
-      );
-      datos = [];
-    }
-=======
     datos = [];
->>>>>>> b492828a533532952a70dfc90424eec277e648a9
   }
 }
 

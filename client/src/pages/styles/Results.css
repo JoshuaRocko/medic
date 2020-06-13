@@ -31,7 +31,7 @@ span:hover {
   background-color: #1b7ced;
   border: none;
   border-radius: 15px;
-  box-shadow: 0 9px #999;
+  box-shadow: 0 5px #999;
 }
 
 .button:hover {background-color: #2a9df4}
