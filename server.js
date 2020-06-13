@@ -127,7 +127,7 @@ async function insertaMed(data, med) {
       datos.push(value);
     }
     pool.query(
-      `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
+      `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
       (error, result) => {
         if (error) throw error;
         console.log(result);
