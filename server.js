@@ -56,6 +56,30 @@ app.post("/addhistory", (req, res) => {
   );
 });
 
+app.post("/like", (req, res) => {
+  const idUser = req.body.idUser;
+  const idProd = req.body.idProd;
+  pool.query(
+    `insert into likes (idProd, idUser) values (${idProd}, ${idUser})`,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );
+});
+
+app.post("/unlike", (req, res) => {
+  const idUser = req.body.idUser;
+  const idProd = req.body.idProd;
+  pool.query(
+    `delete from likes where idProd = ${idProd} AND idUser = ${idUser}`,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );
+});
+
 app.get("/verifyuser/:username/:email", (req, res) => {
   pool.query(
     `select * from users where (username=lower('${req.params.username}') or email=lower('${req.params.email}'))`,

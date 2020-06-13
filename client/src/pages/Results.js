@@ -107,16 +107,50 @@ class Results extends React.Component {
           </form>*/
   render() {
     function myFunction(precio) {
-      //var value = 
-      console.log("precio es",precio);
+      //console.log("precio es",precio);
       if(localStorage.getItem("idUser") == undefined){
         console.log("no user loged in");
-      }else{
         
+      }else{
         console.log("user",localStorage.getItem("idUser"),"liked product",precio);
+        var elem = document.getElementById(precio);
+        var value = elem.getAttribute('data-val');
+        if(value == 0){//like
+          elem.style.color = "blue";
+          elem.setAttribute('data-val', '1');
+          
+          fetch("/like", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              idUser: localStorage.getItem("idUser"),
+              idProd: precio,
+            }),
+          })
+            .then((response) => {
+              return response.json();
+            })
+        }
+        else{//unlike
+          elem.style.color = "white";
+          elem.setAttribute('data-val', '0');
+
+          fetch("/unlike", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              idUser: localStorage.getItem("idUser"),
+              idProd: precio,
+            }),
+          })
+            .then((response) => {
+              return response.json();
+            })
+        }
+
 
       }
-      document.getElementById(precio).style.color = "blue";
+      
       
       }
     if (this.state.loading === true) {
@@ -187,7 +221,7 @@ class Results extends React.Component {
                   </div>
 
                   <span onClick={() => myFunction(result.idm)}>
-                    <button class="button">Agregar a\nfavoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
+                    <button className="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data-val="0" /></button>
                     </span>
                   <div className="card-footer text-center">
                     <a
