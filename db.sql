@@ -24,7 +24,7 @@ create table producto(
 	srcImgProd varchar(255),
 	srcUrlProd varchar(255),
 	idMed int not null,
-	tiendavarchar(64),
+	tienda varchar(64),
 	FOREIGN KEY (idMed)REFERENCES medicamento(idMed)
 );
 
@@ -37,6 +37,7 @@ create table likes(
 	FOREIGN KEY (idProd)REFERENCES producto(idProd),
 	FOREIGN KEY (idUser)REFERENCES users(idUser)
 );
+
 
 drop table if exists historial;
 create table historial(

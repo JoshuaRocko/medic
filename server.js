@@ -100,8 +100,10 @@ function existeMed(med) {
   })
 }
 
+
+
 async function insertaMed(med){
-  var rows;
+  let rows;
   console.log("pregunta si existe med en base");
   // await pool.query(
   //   `select idMed from medicamento where nombreMed =lower('${med}')`,
@@ -144,6 +146,8 @@ async function insertaMed(med){
     }
  // }
 }
+
+
 /* CONFIG EXPRESS */
 
 const port = 5000;
