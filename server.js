@@ -118,6 +118,19 @@ app.post("/unlike", (req, res) => {
   );
 });
 
+app.get("/getLike/:idUser/:idProd", (req, res) => {
+  const idUser = req.params.idUser;
+  const idProd = req.params.idProd;
+  pool.query(
+    `select idLike from likes where idUser=${idUser} and idProd=${idProd}`,
+    (error, result) => {
+      if (error) throw error;
+      console.log(result);
+      res.send(result);
+    }
+  );
+});
+
 app.get("/verifyuser/:username/:email", (req, res) => {
   pool.query(
     `select * from users where (username=lower('${req.params.username}') or email=lower('${req.params.email}'))`,

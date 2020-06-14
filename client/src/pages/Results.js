@@ -3,8 +3,8 @@ import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+
+import ButtonLike from "../components/ButtonLike";
 
 class Results extends React.Component {
   constructor(props) {
@@ -18,8 +18,9 @@ class Results extends React.Component {
       filter: "true",
       idSession: localStorage.getItem("idUser"),
     };
-
+    this.productRef = [];
     this.changeFilter = this.changeFilter.bind(this);
+    // this.addLike = this.addLike.bind(this);
   }
 
   componentDidMount() {
@@ -147,52 +148,6 @@ class Results extends React.Component {
   }
 
   render() {
-    function myFunction(precio) {
-      //console.log("precio es",precio);
-      if (localStorage.getItem("idUser") == undefined) {
-        console.log("no user loged in");
-      } else {
-        console.log(
-          "user",
-          localStorage.getItem("idUser"),
-          "liked product",
-          precio
-        );
-        var elem = document.getElementById(precio);
-        var value = elem.getAttribute("data-val");
-        if (value == 0) {
-          //like
-          elem.style.color = "blue";
-          elem.setAttribute("data-val", "1");
-
-          fetch("/like", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              idUser: localStorage.getItem("idUser"),
-              idProd: precio,
-            }),
-          }).then((response) => {
-            return response.json();
-          });
-        } else {
-          //unlike
-          elem.style.color = "white";
-          elem.setAttribute("data-val", "0");
-
-          fetch("/unlike", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              idUser: localStorage.getItem("idUser"),
-              idProd: precio,
-            }),
-          }).then((response) => {
-            return response.json();
-          });
-        }
-      }
-    }
     if (this.state.loading === true) {
       return <PageLoading />;
     }
@@ -221,6 +176,7 @@ class Results extends React.Component {
 
       cardG.push(
         <div key={i} className="card mb-3">
+          {console.log(result.idm)}
           <img
             href={result.link}
             className="card-img-top imagen"
@@ -228,7 +184,11 @@ class Results extends React.Component {
             alt="Imagen no disponible por el momento"
           />
           <div className="card-body">
-            <a className="card-title text-primary" href={result.link}>
+            <a
+              className="card-title text-primary"
+              href={result.link}
+              target="blank"
+            >
               {result.desc}
             </a>
             <p className="card-text">Precio: ${result.precio}</p>
@@ -238,17 +198,10 @@ class Results extends React.Component {
             <a href={result.link} className="btn btn-dark" target="blank">
               Ir al sitio
             </a>
-            <span onClick={() => myFunction(result.idm)}>
-              <button className="button">
-                Agregar a favoritos&nbsp;&nbsp;&nbsp;
-                <FontAwesomeIcon
-                  icon={faThumbsUp}
-                  size="1x"
-                  id={result.idm}
-                  data="0"
-                />
-              </button>
-            </span>
+            <ButtonLike
+              idm={result.idm}
+              ref={(productRef) => (this.productRef[result.idm] = productRef)}
+            ></ButtonLike>
           </div>
         </div>
       );
