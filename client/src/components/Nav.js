@@ -23,6 +23,7 @@ class Nav extends React.Component {
       session: null,
       idSession: null,
     });
+    window.location.href = "http://localhost:3000/";
   };
 
   render() {
@@ -58,10 +59,14 @@ class Nav extends React.Component {
                 <div className="user" align="center">
                   {this.state.session}
                 </div>
-                <button className="btn btn-login btn-lg">Ver historial</button>
+                <button className="btn btn-login btn-lg">
+                  <Link to="/historial" style={{ color: "white" }}>
+                    Ver historial
+                  </Link>
+                </button>
                 <button className="btn btn-login btn-lg">Ver favoritos</button>
                 <button onClick={this.logout} className="btn btn-login btn-lg">
-                  Cerrar session
+                  Cerrar sesi&oacute;n
                 </button>
               </div>
             </React.Fragment>

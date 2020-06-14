@@ -50,9 +50,44 @@ app.post("/addhistory", (req, res) => {
   const med = req.body.med;
   const idMed = req.body.idMed;
   pool.query(
-    `insert into historial values ('${med}', ${idMed} ,${idUser})`,
+    `insert into historial (nombreMed, idMed, idUser) values ('${med}', ${idMed} ,${idUser})`,
     (error, result) => {
-      if (error) res.send({});
+      if (error) res.send({ error });
+      res.send(result);
+    }
+  );
+});
+
+app.get("/checkHistory/:idMed/:idUser", (req, res) => {
+  const idMed = req.params.idMed;
+  const idUser = req.params.idUser;
+  pool.query(
+    `select nombreMed, lastSearch from historial where idUser=${idUser} and idMed=${idMed}`,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );
+});
+
+app.post("/updateHistory", (req, res) => {
+  const idUser = req.body.idUser;
+  const idMed = req.body.idMed;
+  pool.query(
+    `update historial set lastSearch = current_timestamp where idMed = ${idMed} and idUser = ${idUser}`,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );
+});
+
+app.get("/getHistory/:idUser", (req, res) => {
+  const idUser = req.params.idUser;
+  pool.query(
+    `select nombreMed, lastSearch, idMed from historial where idUser=${idUser}`,
+    (error, result) => {
+      if (error) throw error;
       res.send(result);
     }
   );

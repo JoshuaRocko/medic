@@ -44,10 +44,11 @@ create table historial(
     nombreMed varchar(128) not null,
    	idMed int not null,
 	idUser int not null,
+    lastSearch datetime not null default current_timestamp,
     primary key (idMed, idUser),
     FOREIGN KEY (idMed)REFERENCES medicamento(idMed),
 	FOREIGN KEY (idUser)REFERENCES users(idUser)
 );
 
-insert into users (username, email, pass) values('joshuarocko', 'joshua.chirino@gmail.com', md5('abcdefg'));
+insert into users (username, email, pass) values('joshuarocko', 'joshua.chirino@gmail.com', md5('12345'));
 

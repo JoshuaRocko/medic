@@ -19,16 +19,15 @@ class Home extends React.Component {
   };
 
   handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       this.props.history.push(`/results/${this.state.med}`);
     }
-  }
+  };
 
   render() {
     return (
       <div>
-        <div className="fondo">
-        </div>
+        <div className="fondo"></div>
         <div className="d-flex align-items-center flex-column home-text">
           <p className="titlehome">Medic Scraper</p>
           <p className="text-shadow">Buscar medicamento</p>
@@ -45,6 +44,10 @@ class Home extends React.Component {
               <FontAwesomeIcon icon={faSearch} size="3x" />
             </Link>
           </div>
+          <p>
+            Busca Medicametos - Compara precios - Obt&eacute;n
+            informaci&oacute;n
+          </p>
         </div>
       </div>
     );

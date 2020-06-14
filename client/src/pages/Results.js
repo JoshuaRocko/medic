@@ -76,17 +76,46 @@ class Results extends React.Component {
 
   addHistory = () => {
     if (this.state.idSession) {
-      fetch("/addhistory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          idUser: this.state.idSession,
-          idMed: this.state.idMed,
-          med: this.props.match.params.med,
-        }),
-      }).then((response) => {
-        return response.json();
-      });
+      fetch(`/checkHistory/${this.state.idMed}/${this.state.idSession}`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((resultado) => {
+          if (resultado.length > 0) {
+            /* Update */
+            fetch("/updateHistory", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                idUser: this.state.idSession,
+                idMed: this.state.idMed,
+              }),
+            })
+              .then((respose) => {
+                return respose.json();
+              })
+              .then((resultado) => {
+                //console.log(resultado);
+              });
+          } else {
+            /* Add */
+            fetch("/addhistory", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                idUser: this.state.idSession,
+                idMed: this.state.idMed,
+                med: this.props.match.params.med,
+              }),
+            })
+              .then((response) => {
+                return response.json();
+              })
+              .then((resultado) => {
+                //console.log(resultado);
+              });
+          }
+        });
     }
   };
 
