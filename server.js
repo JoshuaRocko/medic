@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const scraper = require("./scraper");
 const pool = require("./database");
 const puppeteer = require("puppeteer");
+const { reset } = require("nodemon");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,12 +46,13 @@ app.post("/adduser", (req, res) => {
 });
 
 app.post("/addhistory", (req, res) => {
-  const userid = req.body.username;
+  const idUser = req.body.idUser;
   const med = req.body.med;
+  const idMed = req.body.idMed;
   pool.query(
-    `insert into historial (idMed, idUser) values ((select idMed from medicamento where nombreMed = lower('${med}')), ${userid})`,
+    `insert into historial values ('${med}', ${idMed} ,${idUser})`,
     (error, result) => {
-      if (error) throw error;
+      if (error) res.send({});
       res.send(result);
     }
   );

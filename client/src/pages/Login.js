@@ -31,8 +31,10 @@ class Login extends React.Component {
         return res.json();
       })
       .then((results) => {
+        console.log(results);
         if (results.userExists) {
           const hash = md5(this.state.form.pass);
+          console.log(hash);
           this.setState({
             loading: false,
             correct: hash === results.result[0].pass,

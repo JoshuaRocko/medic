@@ -8,7 +8,7 @@ class Nav extends React.Component {
     this.state = {
       menu: false,
       session: localStorage.getItem("username"),
-      idSession: localStorage.getItem("idUser")
+      idSession: localStorage.getItem("idUser"),
     };
     this.toggleMenu = this.toggleMenu.bind(this);
   }
@@ -20,7 +20,8 @@ class Nav extends React.Component {
   logout = (e) => {
     localStorage.clear();
     this.setState({
-      session: window.localStorage.getItem("user"),
+      session: null,
+      idSession: null,
     });
   };
 
@@ -54,11 +55,15 @@ class Nav extends React.Component {
           {this.state.session && (
             <React.Fragment>
               <div className="navbar-nav ml-auto">
-                <div className="user" align="center">{this.state.session}</div>
+                <div className="user" align="center">
+                  {this.state.session}
+                </div>
                 <button className="btn btn-login btn-lg">Ver historial</button>
                 <button className="btn btn-login btn-lg">Ver favoritos</button>
-                <button onClick={this.logout} className="btn btn-login btn-lg">Cerrar session</button>
-              </div> 
+                <button onClick={this.logout} className="btn btn-login btn-lg">
+                  Cerrar session
+                </button>
+              </div>
             </React.Fragment>
           )}
         </nav>

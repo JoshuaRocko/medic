@@ -10,7 +10,7 @@ class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      med: props.match.params.med,
+      med: props.match.params.med.toLowerCase(),
       loading: true,
       error: null,
       data: [],
@@ -24,19 +24,6 @@ class Results extends React.Component {
 
   componentDidMount() {
     this.fetchData();
-    /*if(this.state.idSession != null){ // si el usuario esta registrado
-      fetch("/addhistory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: this.state.idSession,
-          med: this.props.match.params.med,
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-    }*/
   }
 
   fetchData = () => {
@@ -63,6 +50,7 @@ class Results extends React.Component {
       })
       .then((data) => {
         this.setState({ data, loading: false });
+        this.addHistory();
       });
   };
 
@@ -72,8 +60,34 @@ class Results extends React.Component {
         return response.json();
       })
       .then((data) => {
-        this.setState({ data, loading: false });
+        this.setState({ data });
+        fetch(`/existeMed/${this.state.med}`)
+          .then((response) => {
+            return response.json();
+          })
+          .then((resultado) => {
+            if (resultado.length > 0) {
+              this.setState({ idMed: resultado[0].idMed, loading: false });
+              this.addHistory();
+            }
+          });
       });
+  };
+
+  addHistory = () => {
+    if (this.state.idSession) {
+      fetch("/addhistory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idUser: this.state.idSession,
+          idMed: this.state.idMed,
+          med: this.props.match.params.med,
+        }),
+      }).then((response) => {
+        return response.json();
+      });
+    }
   };
 
   changeFilter(event) {
@@ -81,7 +95,7 @@ class Results extends React.Component {
     this.setState({ filter: event.target.value });
     console.log(this.state.filter);
     let aux = this.state.data;
-/*
+    /*
     for (let x = 0; x < aux.length; x++) {
       for (let i = 0; i < aux.length-x-1; i++) {
           if(aux[i] < aux[i+1]){
@@ -102,21 +116,26 @@ class Results extends React.Component {
     });
     this.setState({ data: dataOrdered });
   }
-  
-render() {
+
+  render() {
     function myFunction(precio) {
       //console.log("precio es",precio);
-      if(localStorage.getItem("idUser") == undefined){
+      if (localStorage.getItem("idUser") == undefined) {
         console.log("no user loged in");
-        
-      }else{
-        console.log("user",localStorage.getItem("idUser"),"liked product",precio);
+      } else {
+        console.log(
+          "user",
+          localStorage.getItem("idUser"),
+          "liked product",
+          precio
+        );
         var elem = document.getElementById(precio);
-        var value = elem.getAttribute('data-val');
-        if(value == 0){//like
+        var value = elem.getAttribute("data-val");
+        if (value == 0) {
+          //like
           elem.style.color = "blue";
-          elem.setAttribute('data-val', '1');
-          
+          elem.setAttribute("data-val", "1");
+
           fetch("/like", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -124,14 +143,13 @@ render() {
               idUser: localStorage.getItem("idUser"),
               idProd: precio,
             }),
-          })
-            .then((response) => {
-              return response.json();
-            })
-        }
-        else{//unlike
+          }).then((response) => {
+            return response.json();
+          });
+        } else {
+          //unlike
           elem.style.color = "white";
-          elem.setAttribute('data-val', '0');
+          elem.setAttribute("data-val", "0");
 
           fetch("/unlike", {
             method: "POST",
@@ -140,33 +158,40 @@ render() {
               idUser: localStorage.getItem("idUser"),
               idProd: precio,
             }),
-          })
-            .then((response) => {
-              return response.json();
-            })
+          }).then((response) => {
+            return response.json();
+          });
         }
-
-
       }
-      
-      
-      }
+    }
     if (this.state.loading === true) {
       return <PageLoading />;
     }
-    
+
     let regreso = [];
     let cardG = [];
     this.state.data.map((result, i) => {
       if (result.link === undefined) {
-        regreso.push(<Redirect to={'/medicamento-no-encontrado/' + this.props.match.params.med} />); {/* redireccionar a una página de error */ }
+        regreso.push(
+          <Redirect
+            to={"/medicamento-no-encontrado/" + this.props.match.params.med}
+          />
+        );
+        {
+          /* redireccionar a una página de error */
+        }
       }
-      if (i % 4 == 0) {
-        regreso.push(<div className="card-deck" key={i}>{cardG}</div>);
+      if (i % 4 === 0) {
+        regreso.push(
+          <div className="card-deck" key={i}>
+            {cardG}
+          </div>
+        );
         cardG = [];
       }
 
-       cardG.push(<div key={i} className="card mb-3">
+      cardG.push(
+        <div key={i} className="card mb-3">
           <img
             href={result.link}
             className="card-img-top imagen"
@@ -181,16 +206,20 @@ render() {
             <p className="card-text">Tienda: {result.tienda}</p>
           </div>
           <div className="card-footer text-center">
-            <a
-              href={result.link}
-              className="btn btn-dark"
-              target="blank"
-            >
+            <a href={result.link} className="btn btn-dark" target="blank">
               Ir al sitio
-              </a>
-              <span onClick={() => myFunction(result.idm)}>
-                    <button className="button">Agregar a favoritos&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faThumbsUp} size="1x" id={result.idm} data="0" /></button>
-                    </span>
+            </a>
+            <span onClick={() => myFunction(result.idm)}>
+              <button className="button">
+                Agregar a favoritos&nbsp;&nbsp;&nbsp;
+                <FontAwesomeIcon
+                  icon={faThumbsUp}
+                  size="1x"
+                  id={result.idm}
+                  data="0"
+                />
+              </button>
+            </span>
           </div>
         </div>
       );
@@ -201,7 +230,6 @@ render() {
           <p className="mb-0">
             <Link to={`/information/${this.props.match.params.med}`}>
               Ver información del medicamento
-              
             </Link>
           </p>
         </div>
@@ -215,7 +243,6 @@ render() {
             &nbsp;&nbsp;&nbsp; Ordenar productos
             <select
               className="form-control"
-        
               onChange={this.changeFilter}
               value={this.state.filter}
             >
@@ -224,9 +251,7 @@ render() {
             </select>
           </div>
         </nav>
-        <div className="container">
-          {regreso}
-        </div>
+        <div className="container">{regreso}</div>
       </React.Fragment>
     );
   }
