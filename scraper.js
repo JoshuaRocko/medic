@@ -181,7 +181,7 @@ async function searchChe(med, page) {
     const imgs = await page.evaluate(() =>
       Array.from(
         document.querySelectorAll(
-          "div.plp-product-thumb > img:not([class='PLP-promotion-icon'])"
+          "a.thumb > div.plp-product-thumb > img:not([class='PLP-promotion-icon'])"
         )
       )
         .map((img) => img.src)
@@ -193,9 +193,16 @@ async function searchChe(med, page) {
         .splice(0, 6)
     );
     let arr = [];
+    if(titles.length > 0){
+      let arrEr = [];
+      let arrEmt = [];
+      arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt, arrEmt);
+      return arrEr;
+    }else{
     arr.push(titles, prices, imgs, links, ["Chedraui"]);
 
     return arr;
+  }
   } catch (e) {
     console.log(e);
     let arrEr = [];
