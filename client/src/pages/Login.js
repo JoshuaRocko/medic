@@ -14,10 +14,15 @@ class Login extends React.Component {
       },
       loading: false,
       error: false,
-      correct: false,
+      userExists: false,
+      errorPass: false,
       tries: 0,
       session: localStorage.getItem("username"),
     };
+  }
+
+  componentDidMount() {
+    if (this.state.session) this.goHome();
   }
 
   handleSubmit = (e) => {
@@ -37,10 +42,11 @@ class Login extends React.Component {
           console.log(hash);
           this.setState({
             loading: false,
-            correct: hash === results.result[0].pass,
+            userExists: true,
+            errorPass: hash !== results.result[0].pass,
             idUser: results.result[0].idUser,
           });
-          if (this.state.correct) {
+          if (!this.state.errorPass) {
             localStorage.setItem("username", this.state.form.username);
             localStorage.setItem("idUser", this.state.idUser);
             this.goHome();
@@ -48,8 +54,9 @@ class Login extends React.Component {
         } else {
           this.setState({
             loading: false,
-            correct: false,
+            userExists: false,
             tries: 1,
+            errorPass: false,
           });
         }
       });
@@ -72,7 +79,7 @@ class Login extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
-    if (this.state.correct) {
+    if (this.state.userExists && !this.state.errorPass) {
       return (
         <div className="alert alert-success" role="alert">
           <p>Se inicio sesión correctamente</p>
@@ -81,9 +88,14 @@ class Login extends React.Component {
     }
     return (
       <React.Fragment>
-        {this.state.tries > 0 && !this.state.correct && (
+        {this.state.tries > 0 && !this.state.userExists && (
           <div className="alert alert-danger " role="alert">
             <p className="mb-0">No se encontró el usuario</p>
+          </div>
+        )}
+        {this.state.tries > 0 && this.state.userExists && this.state.errorPass && (
+          <div className="alert alert-danger " role="alert">
+            <p className="mb-0">Revisa tu contraseña.</p>
           </div>
         )}
         <div className="d-flex align-items-center flex-column forms">
@@ -111,7 +123,7 @@ class Login extends React.Component {
                 Iniciar
               </button>
               <Link to="/Registration">
-                ¿Aún no tienes una cuenta? Registrate
+                ¿Aún no tienes una cuenta? Reg&iacute;strate
               </Link>
             </form>
           </div>
