@@ -193,7 +193,7 @@ async function searchChe(med, page) {
         .splice(0, 6)
     );
     let arr = [];
-    if(titles.length > 0){
+    if(titles.length == 0){
       let arrEr = [];
       let arrEmt = [];
       arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt, arrEmt);
