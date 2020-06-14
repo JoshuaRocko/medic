@@ -80,8 +80,8 @@ class Historial extends React.Component {
                 <React.Fragment>
                   <li key={history.idMed} className="list-group-item">
                     <Link to={url}>{history.nombreMed.toUpperCase()}</Link>
-                    <p class="card-text">
-                      <small class="text-muted">
+                    <p className="card-text">
+                      <small className="text-muted">
                         &Uacute;ltima b&uacute;squeda: {fecha} a las {hora}
                       </small>
                     </p>

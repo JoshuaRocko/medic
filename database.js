@@ -5,6 +5,7 @@ const config = {
   user: "root",
   password: "root",
   database: "medic",
+  timezone: "utc",
 };
 
 const pool = mysql.createPool(config);

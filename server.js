@@ -74,7 +74,7 @@ app.post("/updateHistory", (req, res) => {
   const idUser = req.body.idUser;
   const idMed = req.body.idMed;
   pool.query(
-    `update historial set lastSearch = current_timestamp where idMed = ${idMed} and idUser = ${idUser}`,
+    `update historial set lastSearch = now() where idMed = ${idMed} and idUser = ${idUser}`,
     (error, result) => {
       if (error) throw error;
       res.send(result);
@@ -88,6 +88,7 @@ app.get("/getHistory/:idUser", (req, res) => {
     `select nombreMed, lastSearch, idMed from historial where idUser=${idUser}`,
     (error, result) => {
       if (error) throw error;
+      console.log(result);
       res.send(result);
     }
   );
