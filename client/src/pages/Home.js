@@ -19,15 +19,17 @@ class Home extends React.Component {
   };
 
   handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       this.props.history.push(`/results/${this.state.med}`);
     }
   }
-  
+
   render() {
     return (
-      <div className="fondo">
-        <div className="d-flex align-items-center flex-column">
+      <div>
+        <div className="fondo">
+        </div>
+        <div className="d-flex align-items-center flex-column home-text">
           <p className="titlehome">Medic Scraper</p>
           <p className="text-shadow">Buscar medicamento</p>
           <div className="d-flex align-items-center">
