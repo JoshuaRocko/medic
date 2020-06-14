@@ -4,7 +4,7 @@ import "./styles/Information.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-
+import susana from "../assets/susana-d.png";
 
 class ErrorM extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class ErrorM extends React.Component {
   }
 
   handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       this.props.history.push(`/results/${this.state.med}`);
     }
   }
@@ -28,7 +28,7 @@ class ErrorM extends React.Component {
       med: event.target.value,
     });
   };
-  
+
   componentDidMount() {
     fetch(`/info/${this.props.match.params.med}`)
       .then((response) => {
@@ -53,23 +53,24 @@ class ErrorM extends React.Component {
     //   return <Redirect to="/" />; {/* redireccionar a una página de error */}
     // }
     return (
-      <React.Fragment>
-        <h1 className="title">No se encontró ningun producto con el nombre de {this.props.match.params.med.toUpperCase()}</h1>
+      <React.Fragment className="container">
+        <h1 className="title">No se encontró ningún producto con el nombre de {this.props.match.params.med.toUpperCase()}</h1>
+        <img src={susana} className="img-susana"></img>
         <hr />
-        <h6>Por favor intente escribirlo sin acentos o puede bucar otro medicamento</h6>{/* alinear al centro */}
-        <div className="d-flex align-items-center">
-            <input
-              className="in"
-              type="search"
-              placeholder="Teclea el nombre del medicamento"
-              onChange={this.handleInput}
-              value={this.state.med}
-              onKeyPress={this.handleKeyPress}
-            />
-            <Link to={`/results/${this.state.med}`}>
-              <FontAwesomeIcon icon={faSearch} size="3x" />
-            </Link>
-          </div>
+        <div className="text-block">
+        <h6>Por favor, intente escribirlo sin acentos o puede buscar otro medicamento</h6>{/* alinear al centro */}
+          <input
+            className="in"
+            type="search"
+            placeholder="Teclea el nombre del medicamento"
+            onChange={this.handleInput}
+            value={this.state.med}
+            onKeyPress={this.handleKeyPress}
+          />
+          <Link to={`/results/${this.state.med}`}>
+            <FontAwesomeIcon icon={faSearch} size="3x" />
+          </Link>
+        </div>
         <div className></div>
       </React.Fragment>
     );

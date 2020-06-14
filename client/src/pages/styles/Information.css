@@ -1,6 +1,24 @@
 .title {
-  color: #008ec8;
-  font-size: 4rem;
+  color: #457abf;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.img-susana {
+  width: 300px;
+  display: block;
+  margin: auto;
+}
+
+.text-block {
+  font-weight: bold;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
   text-align: center;
 }
 
@@ -9,5 +27,5 @@
 }
 
 h3 {
-  color: #008ec8;
+  color: #457abf;
 }
