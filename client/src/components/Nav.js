@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles/Nav.css";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Nav extends React.Component {
   constructor(props) {
@@ -11,6 +11,16 @@ class Nav extends React.Component {
       idSession: localStorage.getItem("idUser"),
     };
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.goFavs = this.goFavs.bind(this);
+    this.goHist = this.goHist.bind(this);
+  }
+
+  goFavs() {
+    this.props.history.push(`/favoritos/`);
+  }
+
+  goHist() {
+    this.props.history.push(`/historial/`);
   }
 
   toggleMenu() {
@@ -35,50 +45,48 @@ class Nav extends React.Component {
           <Link to="/" className="navbar-brand">
             <h1>Medic Scraper</h1>
           </Link>
-          {!this.state.session && (
-            <React.Fragment>
-              <button
-                className="navbar-toggler"
-                type="button"
-                onClick={this.toggleMenu}
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className={"collapse navbar-collapse " + show}>
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={this.toggleMenu}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className={"collapse navbar-collapse " + show}>
+            {!this.state.session && (
+              <React.Fragment>
+
                 <div className="navbar-nav ml-auto">
                   <Link to="/Login" className="btn btn-login btn-lg">
                     Iniciar sesi&oacute;n
                   </Link>
                 </div>
-              </div>
-            </React.Fragment>
-          )}
-          {this.state.session && (
-            <React.Fragment>
-              <div className="navbar-nav ml-auto">
-                <div className="user" align="center">
-                  {this.state.session}
-                </div>
-                <button className="btn btn-login btn-lg">
-                  <Link to="/historial" style={{ color: "white" }}>
+
+              </React.Fragment>
+            )}
+            {this.state.session && (
+              <React.Fragment>
+                <div className="navbar-nav ml-auto">
+                  <span className="user" align="center">
+                    {this.state.session}
+                  </span>
+                  <button onClick={this.goHist} className="btn btn-login btn-md">
                     Ver historial
-                  </Link>
-                </button>
-                <button className="btn btn-login btn-lg">
-                  <Link to="/favoritos" style={{ color: "white" }}>
+                  </button>
+                  <button onClick={this.goFavs} className="btn btn-login btn-md">
                     Ver favoritos
-                  </Link>
                 </button>
-                <button onClick={this.logout} className="btn btn-login btn-lg">
-                  Cerrar sesi&oacute;n
+                  <button onClick={this.logout} className="btn btn-login btn-lg">
+                    Cerrar sesi&oacute;n
                 </button>
-              </div>
-            </React.Fragment>
-          )}
+                </div>
+              </React.Fragment>
+            )}
+          </div>
         </nav>
       </React.Fragment>
     );
   }
 }
 
-export default Nav;
+export default withRouter(Nav);

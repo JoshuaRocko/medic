@@ -53,7 +53,8 @@ class ErrorM extends React.Component {
     //   return <Redirect to="/" />; {/* redireccionar a una página de error */}
     // }
     return (
-      <React.Fragment className="container">
+      <React.Fragment>
+        <div className="container">
         <h1 className="title">No se encontró ningún producto con el nombre de {this.props.match.params.med.toUpperCase()}</h1>
         <img src={susana} className="img-susana"></img>
         <hr />
@@ -71,7 +72,8 @@ class ErrorM extends React.Component {
             <FontAwesomeIcon icon={faSearch} size="3x" />
           </Link>
         </div>
-        <div className></div>
+        
+        </div>
       </React.Fragment>
     );
   }

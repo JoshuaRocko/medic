@@ -68,28 +68,30 @@ class Historial extends React.Component {
     return (
       <React.Fragment>
         <div className="container">
-          <h1>Tu historial de b&uacute;squeda:</h1>
-        </div>
-        <div className="card">
-          <ul className="list-group list-group-flush">
-            {this.state.data.map((history) => {
-              const fecha = history.lastSearch.substring(0, 10);
-              const hora = history.lastSearch.substring(11, 16);
-              const url = `/results/${history.nombreMed.toLowerCase()}`;
-              return (
-                <React.Fragment>
-                  <li key={history.idMed} className="list-group-item">
-                    <Link to={url}>{history.nombreMed.toUpperCase()}</Link>
-                    <p className="card-text">
-                      <small className="text-muted">
-                        &Uacute;ltima b&uacute;squeda: {fecha} a las {hora}
-                      </small>
-                    </p>
-                  </li>
-                </React.Fragment>
-              );
-            })}
-          </ul>
+          <div>
+            <h1>Tu historial de b&uacute;squeda:</h1>
+          </div>
+          <div className="card">
+            <ul className="list-group list-group-flush">
+              {this.state.data.map((history) => {
+                const fecha = history.lastSearch.substring(0, 10);
+                const hora = history.lastSearch.substring(11, 16);
+                const url = `/results/${history.nombreMed.toLowerCase()}`;
+                return (
+                  <React.Fragment>
+                    <li key={history.idMed} className="list-group-item">
+                      <Link to={url}>{history.nombreMed.toUpperCase()}</Link>
+                      <p className="card-text">
+                        <small className="text-muted">
+                          &Uacute;ltima b&uacute;squeda: {fecha} a las {hora}
+                        </small>
+                      </p>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </React.Fragment>
     );

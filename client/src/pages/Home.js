@@ -45,7 +45,7 @@ class Home extends React.Component {
             </Link>
           </div>
           <p>
-            Busca Medicametos - Compara precios - Obt&eacute;n
+            Busca Medicamentos - Compara precios - Obt&eacute;n
             informaci&oacute;n
           </p>
         </div>

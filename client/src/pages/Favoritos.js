@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import PageLoading from "../components/PageLoading";
 import { Link } from "react-router-dom";
 import susana from "../assets/susana-d.png";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 class Favoritos extends Component {
   constructor(props) {
     super(props);
@@ -59,17 +60,38 @@ class Favoritos extends Component {
     if (!this.state.favoritos) {
       return (
         <React.Fragment>
-          <h1>
-            A&uacute;n no tienes productos marcados como favoritos. Puedes{" "}
-            <Link to="/"> buscar algo </Link> para agregarlos a favoritos
+          <div className="container">
+            <h1>
+              A&uacute;n no tienes productos marcados como favoritos. Puedes{" "}
+              <Link to="/"> buscar algo </Link> para agregarlos a favoritos
           </h1>
+            <hr />
+            <img src={susana} className="img-susana"></img>
+            <hr />
+            <center>
+              <div>
+                <input
+                  className="in"
+                  type="search"
+                  placeholder="Teclea el nombre del medicamento"
+                  onChange={this.handleInput}
+                  value={this.state.med}
+                  onKeyPress={this.handleKeyPress}
+                />
+                <Link to={`/results/${this.state.med}`}>
+                  <FontAwesomeIcon icon={faSearch} size="3x" />
+                </Link>
+              </div></center>
+          </div>
         </React.Fragment>
       );
     }
 
     return (
       <React.Fragment>
-        <h1>Tus Favoritos:</h1>
+        <div className="container">
+          <h1>Tus Favoritos:</h1>
+        </div>
       </React.Fragment>
     );
   }
