@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PageLoading from "../components/PageLoading";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import susana from "../assets/susana-d.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -52,7 +52,7 @@ class Favoritos extends Component {
         <React.Fragment>
           <div className="container" style={{ textAlign: "center" }}>
             <h1>Ooops, parece que no puedes estar aquí</h1>
-            <img src={susana} className="img-susana"></img>
+            <img src={susana} alt="#QuédateEnCasa" className="img-susana"></img>
             <h4>
               Para ver tus productos favoritos
               <Link to="/login"> Inicia Sesi&oacute;n.</Link>
@@ -79,7 +79,7 @@ class Favoritos extends Component {
               <Link to="/"> buscar algo </Link> para agregarlos a favoritos
           </h1>
             <hr />
-            <img src={susana} className="img-susana"></img>
+            <img src={susana} alt="#QuédateEnCasa" className="img-susana"></img>
             <hr />
             <center>
               <div>
@@ -100,10 +100,71 @@ class Favoritos extends Component {
       );
     }
 
+    let regreso = [];
+    let cardG = [];
+
+    let len = this.state.favoritos.length;
+    this.state.favoritos.map((result, i) => {
+      if (result.link === undefined) {
+        regreso.push(
+          <Redirect
+            to={"/medicamento-no-encontrado/" + this.props.match.params.med}
+          />
+        );
+      }
+
+      cardG.push(
+        <div key={i} className="card mb-3">
+
+          <img
+            href={result.link}
+            className="card-img-top imagen"
+            src={result.img}
+            alt="Imagen no disponible por el momento"
+          />
+          <div className="card-body">
+            <a
+              className="card-title text-primary"
+              href={result.link}
+              target="blank"
+            >
+              {result.desc}
+            </a>
+            <p className="card-text">Precio: ${result.precio}</p>
+            <p className="card-text">Tienda: {result.tienda}</p>
+          </div>
+          <div className="card-footer text-center">
+            <a href={result.link} className="btn btn-dark" target="blank">
+              Ir al sitio
+            </a>
+
+          </div>
+        </div>
+      );
+
+
+      if (i % 4 === 0 && i !== 0) {
+        regreso.push(
+          <div className="card-deck" key={i}>
+            {cardG}
+          </div>
+        );
+        cardG = [];
+      } else if (this.state.favoritos.length - 1 == i && cardG.length > 0) {
+        regreso.push(
+          <div className="card-deck" key={i}>
+            {cardG}
+          </div>
+        );
+        cardG = [];
+      }
+    });
+    console.log(regreso)
     return (
       <React.Fragment>
         <div className="container">
           <h1>Tus Favoritos:</h1>
+          <div>{regreso}</div>
         </div>
       </React.Fragment>
     );

@@ -177,7 +177,9 @@ class Results extends React.Component {
     let cerrarModal = () => this.setState({ mostrarModal: false });
     let regreso = [];
     let cardG = [];
+    console.log(this.state.data)
     this.state.data.map((result, i) => {
+
       if (result.link === undefined) {
         regreso.push(
           <Redirect
@@ -188,7 +190,15 @@ class Results extends React.Component {
           /* redireccionar a una página de error */
         }
       }
-      if (i % 4 === 0) {
+
+      if (i % 4 === 0 ) {
+        regreso.push(
+          <div className="card-deck" key={i}>
+            {cardG}
+          </div>
+        );
+        cardG = [];
+      } else if (this.state.data.length - 1 == i && cardG.length > 0) {
         regreso.push(
           <div className="card-deck" key={i}>
             {cardG}
@@ -228,6 +238,7 @@ class Results extends React.Component {
           </div>
         </div>
       );
+
     });
     /*<Link t o={`/information/${this.props.match.params.med}`}>
               Ver información del medicamento
