@@ -64,7 +64,11 @@ class Nav extends React.Component {
                     Ver historial
                   </Link>
                 </button>
-                <button className="btn btn-login btn-lg">Ver favoritos</button>
+                <button className="btn btn-login btn-lg">
+                  <Link to="/favoritos" style={{ color: "white" }}>
+                    Ver favoritos
+                  </Link>
+                </button>
                 <button onClick={this.logout} className="btn btn-login btn-lg">
                   Cerrar sesi&oacute;n
                 </button>

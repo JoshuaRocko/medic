@@ -60,7 +60,7 @@ class Historial extends React.Component {
     if (!this.state.data) {
       return (
         <React.Fragment>
-          <h1>A&uacute;</h1>
+          <h1>A&uacute;n</h1>
         </React.Fragment>
       );
     }

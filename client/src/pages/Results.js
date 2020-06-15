@@ -3,7 +3,6 @@ import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-
 import ButtonLike from "../components/ButtonLike";
 
 class Results extends React.Component {

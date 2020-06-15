@@ -131,6 +131,19 @@ app.get("/getLike/:idUser/:idProd", (req, res) => {
   );
 });
 
+app.get("/getLikes/:idUser", (req, res) => {
+  const idUser = req.params.idUser;
+  pool.query(
+    `select p.nombreProd as 'desc', p.precio, p.srcImgProd as img, p.srcUrlProd as link, p.tienda ,p.idProd
+    from producto p, likes l where l.idProd=p.idProd and l.idUser=${idUser}`,
+    (error, result) => {
+      if (error) throw error;
+      console.log(result);
+      res.send(result);
+    }
+  );
+});
+
 app.get("/verifyuser/:username/:email", (req, res) => {
   pool.query(
     `select * from users where (username=lower('${req.params.username}') or email=lower('${req.params.email}'))`,

@@ -8,6 +8,7 @@ import Register from "../pages/Register";
 import Information from "../pages/Information";
 import ErrorM from "../pages/ErrorM";
 import Historial from "../pages/Historial";
+import Favoritos from "../pages/Favoritos";
 
 function App(props) {
   return (
@@ -25,6 +26,7 @@ function App(props) {
           component={ErrorM}
         ></Route>
         <Route exact path="/historial" component={Historial}></Route>
+        <Route exact path="/favoritos" component={Favoritos}></Route>
       </Switch>
     </BrowserRouter>
   );
