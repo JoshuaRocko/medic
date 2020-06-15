@@ -18,7 +18,7 @@ class Results extends React.Component {
       filter: "true",
       idSession: localStorage.getItem("idUser"),
       info: undefined,
-      mostrarModal: false
+      mostrarModal: false,
     };
     this.productRef = [];
     this.changeFilter = this.changeFilter.bind(this);
@@ -43,7 +43,7 @@ class Results extends React.Component {
           this.setState({ idMed: 0 });
           this.scrapeData();
         }
-        
+        this.addHistory();
       });
   };
 
@@ -53,6 +53,7 @@ class Results extends React.Component {
         return response.json();
       })
       .then((data) => {
+        console.log("GET DATAA");
         this.setState({ data, loading: false });
         this.addHistory();
       });
@@ -64,22 +65,41 @@ class Results extends React.Component {
         return response.json();
       })
       .then((data) => {
-        this.setState({ data });
-        fetch(`/existeMed/${this.state.med}`)
+        console.log(data);
+        /** Guardar en la base de datos */
+        fetch("/insertaMed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            med: this.state.med,
+            data,
+          }),
+        })
           .then((response) => {
             return response.json();
           })
-          .then((resultado) => {
-            if (resultado.length > 0) {
-              this.setState({ idMed: resultado[0].idMed, loading: false });
-              this.addHistory();
-            }
+          .then((result) => {
+            /** Set idMed */
+            fetch(`/existeMed/${this.state.med}`)
+              .then((response) => {
+                return response.json();
+              })
+              .then((resultado) => {
+                console.log("EXISTE MED AFTER BASE", resultado);
+                if (resultado.length > 0) {
+                  this.setState({ idMed: resultado[0].idMed });
+                }
+              });
           });
+        this.getData();
+        this.addHistory();
       });
   };
 
   addHistory = () => {
+    console.log("addhistory");
     if (this.state.idSession) {
+      console.log("IdMed", this.state.idMed);
       fetch(`/checkHistory/${this.state.idMed}/${this.state.idSession}`)
         .then((response) => {
           return response.json();
@@ -214,11 +234,19 @@ class Results extends React.Component {
             </Link>*/
     return (
       <React.Fragment>
-        <VentanaModal show={this.state.mostrarModal} onHide={cerrarModal} cabecera= {this.props.match.params.med}
-                     />
+        <VentanaModal
+          show={this.state.mostrarModal}
+          onHide={cerrarModal}
+          cabecera={this.props.match.params.med}
+        />
         <div className="alert alert-primary" role="alert">
           <p className="mb-0">
-            <button className="btn btn-link" onClick={() => {this.setState({mostrarModal: true})}}>
+            <button
+              className="btn btn-link"
+              onClick={() => {
+                this.setState({ mostrarModal: true });
+              }}
+            >
               Ver información del medicamento
             </button>
           </p>

@@ -195,11 +195,13 @@ app.get("/getProducts/:med", async (req, res) => {
 app.get("/scrapeProducts/:med", async (req, res) => {
   const med = req.params.med;
   const data = await scraper.search(med, p);
-  await insertaMed(data, med);
+  //await insertaMed(data, med);
   res.send(data);
 });
 
-async function insertaMed(data, med) {
+app.post("/insertaMed", (req, res) => {
+  const data = req.body.data;
+  const med = req.body.med;
   pool.query(
     `insert into medicamento (nombreMed) values ('${med}')`,
     (error, result) => {
@@ -223,7 +225,7 @@ async function insertaMed(data, med) {
     );
     datos = [];
   }
-}
+});
 
 /* CONFIG EXPRESS */
 
