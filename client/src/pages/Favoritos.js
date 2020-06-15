@@ -19,6 +19,19 @@ class Favoritos extends Component {
     this.fetchData();
   }
 
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      this.props.history.push(`/results/${this.state.med}`);
+    }
+  }
+
+  handleInput = (event) => {
+    this.setState({
+      med: event.target.value,
+    });
+  };
+
+
   fetchData = () => {
     fetch(`/getLikes/${this.state.idUser}`)
       .then((response) => {

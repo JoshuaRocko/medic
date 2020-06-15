@@ -4,6 +4,7 @@ import "./styles/Results.css";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import ButtonLike from "../components/ButtonLike";
+import VentanaModal from "../components/VentanaModal";
 
 class Results extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class Results extends React.Component {
       idMed: 0,
       filter: "true",
       idSession: localStorage.getItem("idUser"),
+      info: undefined,
+      mostrarModal: false
     };
     this.productRef = [];
     this.changeFilter = this.changeFilter.bind(this);
@@ -40,6 +43,7 @@ class Results extends React.Component {
           this.setState({ idMed: 0 });
           this.scrapeData();
         }
+        
       });
   };
 
@@ -150,7 +154,7 @@ class Results extends React.Component {
     if (this.state.loading === true) {
       return <PageLoading />;
     }
-
+    let cerrarModal = () => this.setState({ mostrarModal: false });
     let regreso = [];
     let cardG = [];
     this.state.data.map((result, i) => {
@@ -205,13 +209,18 @@ class Results extends React.Component {
         </div>
       );
     });
+    /*<Link t o={`/information/${this.props.match.params.med}`}>
+              Ver información del medicamento
+            </Link>*/
     return (
       <React.Fragment>
+        <VentanaModal show={this.state.mostrarModal} onHide={cerrarModal} cabecera= {this.props.match.params.med}
+                     />
         <div className="alert alert-primary" role="alert">
           <p className="mb-0">
-            <Link to={`/information/${this.props.match.params.med}`}>
+            <button className="btn btn-link" onClick={() => {this.setState({mostrarModal: true})}}>
               Ver información del medicamento
-            </Link>
+            </button>
           </p>
         </div>
         <nav className="navbar sticky-top navbar-light bg-light">

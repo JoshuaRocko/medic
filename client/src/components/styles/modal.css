@@ -1,0 +1,14 @@
+.modal-header {
+    background-color: #457abf;
+    color: white;
+    text-align: center;
+  }
+
+  .boton{
+    padding-left: 15px;
+  }
+
+  .info {
+    font-size: 8px;
+    font-family: monospace;
+  }
