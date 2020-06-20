@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const scraper = require("./scraper");
 const pool = require("./database");
 const puppeteer = require("puppeteer");
+const { spawnSync } = require("child_process");
+const fs = require("fs");
 const { reset } = require("nodemon");
 
 const app = express();
@@ -45,11 +47,11 @@ app.post("/adduser", (req, res) => {
   );
 });
 
-app.post("/addhistory", (req, res) => {
+app.post("/addhistory", async (req, res) => {
   const idUser = req.body.idUser;
   const med = req.body.med;
   const idMed = req.body.idMed;
-  pool.query(
+  await pool.query(
     `insert into historial (nombreMed, idMed, idUser) values ('${med}', ${idMed} ,${idUser})`,
     (error, result) => {
       if (error) res.send({ error });
@@ -192,38 +194,17 @@ app.get("/getProducts/:med", async (req, res) => {
   );
 });
 
-app.get("/scrapeProducts/:med", async (req, res) => {
+app.get("/scrape/:med", async (req, res) => {
   const med = req.params.med;
-  const data = await scraper.search(med, p);
-  //await insertaMed(data, med);
-  res.send(data);
-});
-
-app.post("/insertaMed", (req, res) => {
-  const data = req.body.data;
-  const med = req.body.med;
-  pool.query(
-    `insert into medicamento (nombreMed) values ('${med}')`,
-    (error, result) => {
-      if (error) throw error;
-      console.log(result);
-    }
-  );
-  for (let i = 0; i < data.length; i++) {
-    let obj = data[i];
-    let datos = [];
-    for (let key in obj) {
-      let value = obj[key];
-      datos.push(value);
-    }
-    pool.query(
-      `INSERT INTO producto(nombreProd, precio, srcImgProd, srcUrlProd, tienda, idMed) VALUES ('${datos[0]}', '${datos[1]}', '${datos[2]}', '${datos[3]}', '${datos[4]}', (select idMed from medicamento where nombreMed = '${med}'));`,
-      (error, result) => {
-        if (error) throw error;
-        console.log(result);
-      }
-    );
-    datos = [];
+  await spawnSync("python", ["./PythonScripts/scraper.py", med]);
+  const rawdata = await fs.readFileSync(`./meds/${med}.json`);
+  try {
+    const data = JSON.parse(rawdata);
+    console.log(data);
+    res.send(data);
+  } catch {
+    console.log(Error);
+    res.send([]);
   }
 });
 

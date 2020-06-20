@@ -7,7 +7,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "author": "JoshuaRocko",
   "license": "MIT",
@@ -22,5 +22,10 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "meds/*"
+    ]
   }
 }

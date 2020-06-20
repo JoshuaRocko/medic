@@ -1,7 +1,6 @@
 import React from "react";
 import PageLoading from "../components/PageLoading";
 import "./styles/Results.css";
-import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import ButtonLike from "../components/ButtonLike";
 import VentanaModal from "../components/VentanaModal";
@@ -16,130 +15,88 @@ class Results extends React.Component {
       data: [],
       idMed: 0,
       filter: "true",
-      idSession: localStorage.getItem("idUser"),
+      idUser: localStorage.getItem("idUser"),
       info: undefined,
       mostrarModal: false,
     };
     this.productRef = [];
     this.changeFilter = this.changeFilter.bind(this);
-    // this.addLike = this.addLike.bind(this);
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
-  fetchData = () => {
-    fetch(`/existeMed/${this.state.med}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((resultado) => {
-        console.log(resultado);
-        if (resultado.length > 0) {
-          this.setState({ idMed: resultado[0].idMed });
-          this.getData();
-        } else {
-          this.setState({ idMed: 0 });
-          this.scrapeData();
-        }
-        this.addHistory();
-      });
+  fetchData = async () => {
+    const response = await fetch(`/existeMed/${this.state.med}`);
+    const resultado = await response.json();
+    if (resultado.length > 0) {
+      console.log("SI EXISTE UWU");
+      this.setState({ idMed: resultado[0].idMed });
+      await this.getData();
+    } else {
+      console.log("NO EXISTE UNU");
+      this.setState({ idMed: 0 });
+      await this.scrapeData();
+    }
+    this.addHistory();
   };
 
-  getData = () => {
-    fetch(`/getProducts/${this.state.med}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log("GET DATAA");
-        this.setState({ data, loading: false });
-        this.addHistory();
-      });
+  getData = async () => {
+    const response = await fetch(`/getProducts/${this.state.med}`);
+    const data = await response.json();
+    if (data) {
+      this.setState({ data, loading: false });
+    }
   };
 
-  scrapeData = () => {
-    fetch(`/scrapeProducts/${this.state.med}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        /** Guardar en la base de datos */
-        fetch("/insertaMed", {
+  scrapeData = async () => {
+    const responseScrapeData = await fetch(`/scrape/${this.state.med}`);
+    const data = await responseScrapeData.json();
+    if (data) {
+      const responseExisteMed = await fetch(`/existeMed/${this.state.med}`);
+      const resultadoExisteMed = await responseExisteMed.json();
+      if (resultadoExisteMed.length > 0) {
+        this.setState({ idMed: resultadoExisteMed[0].idMed });
+        console.log("Se asigno ID", this.state.idMed);
+        await this.getData();
+      } else {
+        this.setState({ idMed: 0 });
+      }
+    }
+  };
+
+  addHistory = async () => {
+    console.log("AddHistory");
+    if (this.state.idUser) {
+      const responseCheckHistory = await fetch(
+        `/checkHistory/${this.state.idMed}/${this.state.idUser}`
+      );
+      const resultCheckHistory = await responseCheckHistory.json();
+      if (resultCheckHistory.length > 0) {
+        /** Update */
+        console.log("UpdateHistory");
+        await fetch("/updateHistory", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            med: this.state.med,
-            data,
+            idUser: this.state.idUser,
+            idMed: this.state.idMed,
           }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((result) => {
-            /** Set idMed */
-            fetch(`/existeMed/${this.state.med}`)
-              .then((response) => {
-                return response.json();
-              })
-              .then((resultado) => {
-                console.log("EXISTE MED AFTER BASE", resultado);
-                if (resultado.length > 0) {
-                  this.setState({ idMed: resultado[0].idMed });
-                }
-              });
-          });
-        this.getData();
-        this.addHistory();
-      });
-  };
-
-  addHistory = () => {
-    console.log("addhistory");
-    if (this.state.idSession) {
-      console.log("IdMed", this.state.idMed);
-      fetch(`/checkHistory/${this.state.idMed}/${this.state.idSession}`)
-        .then((response) => {
-          return response.json();
-        })
-        .then((resultado) => {
-          if (resultado.length > 0) {
-            /* Update */
-            fetch("/updateHistory", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                idUser: this.state.idSession,
-                idMed: this.state.idMed,
-              }),
-            })
-              .then((respose) => {
-                return respose.json();
-              })
-              .then((resultado) => {
-                //console.log(resultado);
-              });
-          } else {
-            /* Add */
-            fetch("/addhistory", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                idUser: this.state.idSession,
-                idMed: this.state.idMed,
-                med: this.props.match.params.med,
-              }),
-            })
-              .then((response) => {
-                return response.json();
-              })
-              .then((resultado) => {
-                //console.log(resultado);
-              });
-          }
         });
+      } else {
+        /** Add */
+        console.log("AddHistory");
+        await fetch("/addhistory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUser: this.state.idUser,
+            idMed: this.state.idMed,
+            med: this.props.match.params.med,
+          }),
+        });
+      }
     }
   };
 
@@ -177,9 +134,8 @@ class Results extends React.Component {
     let cerrarModal = () => this.setState({ mostrarModal: false });
     let regreso = [];
     let cardG = [];
-    console.log(this.state.data)
+    console.log(this.state.data);
     this.state.data.map((result, i) => {
-
       if (result.link === undefined) {
         regreso.push(
           <Redirect
@@ -191,7 +147,7 @@ class Results extends React.Component {
         }
       }
 
-      if (i % 4 === 0 ) {
+      if (i % 4 === 0) {
         regreso.push(
           <div className="card-deck" key={i}>
             {cardG}
@@ -209,7 +165,6 @@ class Results extends React.Component {
 
       cardG.push(
         <div key={i} className="card mb-3">
-          {console.log(result.idm)}
           <img
             href={result.link}
             className="card-img-top imagen"
@@ -238,7 +193,6 @@ class Results extends React.Component {
           </div>
         </div>
       );
-
     });
     /*<Link t o={`/information/${this.props.match.params.med}`}>
               Ver información del medicamento

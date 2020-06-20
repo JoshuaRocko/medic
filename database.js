@@ -9,5 +9,4 @@ const config = {
 };
 
 const pool = mysql.createPool(config);
-
 module.exports = pool;

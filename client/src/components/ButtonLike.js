@@ -20,7 +20,6 @@ class ButtonLike extends React.Component {
 
   checkLike = () => {
     if (this.state.idSession === null) {
-      console.log("nada");
     } else {
       fetch(`/getLike/${this.state.idSession}/${this.props.idm}`)
         .then((response) => {

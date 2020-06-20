@@ -1,1 +1,3 @@
 /node_modules
+/envPython/
+meds/*.json

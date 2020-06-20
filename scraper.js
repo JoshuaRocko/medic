@@ -55,8 +55,8 @@ async function searchFarN(med, page) {
   }
 }
 
-function containsTwoDots(str) { 
-  return str.indexOf('.') != str.lastIndexOf('.'); 
+function containsTwoDots(str) {
+  return str.indexOf(".") != str.lastIndexOf(".");
 }
 
 async function searchSup(med, page) {
@@ -76,13 +76,12 @@ async function searchSup(med, page) {
         .splice(0, 6)
     );
 
-    for(var i =0;i<prices.length;i++){
-      if(containsTwoDots(prices[i])){
-        prices[i] = prices[i].substring(prices[i].indexOf(".")+1);
+    for (var i = 0; i < prices.length; i++) {
+      if (containsTwoDots(prices[i])) {
+        prices[i] = prices[i].substring(prices[i].indexOf(".") + 1);
         prices[i] = prices[i].substring(2);
       }
     }
-
 
     const imgs = await page.evaluate(() =>
       Array.from(document.querySelectorAll("img.lazyload"))
@@ -193,16 +192,16 @@ async function searchChe(med, page) {
         .splice(0, 6)
     );
     let arr = [];
-    if(titles.length == 0){
+    if (titles.length == 0) {
       let arrEr = [];
       let arrEmt = [];
       arrEr.push(arrEmt, arrEmt, arrEmt, arrEmt, arrEmt);
       return arrEr;
-    }else{
-    arr.push(titles, prices, imgs, links, ["Chedraui"]);
+    } else {
+      arr.push(titles, prices, imgs, links, ["Chedraui"]);
 
-    return arr;
-  }
+      return arr;
+    }
   } catch (e) {
     console.log(e);
     let arrEr = [];
@@ -216,25 +215,25 @@ async function searchFaho(med, page) {
   try {
     await page.goto("https://www.fahorro.com/catalogsearch/result/?q=" + med);
     const titles = await page.evaluate(() =>
-      Array.from(
-        document.querySelectorAll(".product-shop > h2")
-      ).map((partner) => partner.innerText.trim()).splice(0, 6)
+      Array.from(document.querySelectorAll(".product-shop > h2"))
+        .map((partner) => partner.innerText.trim())
+        .splice(0, 6)
     );
     const prices = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".price")).map((partner) =>
-        partner.innerText.trim().replace(/[^0-9.]/gi, "")
-      ).splice(0, 6)
+      Array.from(document.querySelectorAll(".price"))
+        .map((partner) => partner.innerText.trim().replace(/[^0-9.]/gi, ""))
+        .splice(0, 6)
     );
     const imgs = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".product-image > img")).map(
-        (img) => img.src
-      ).splice(0, 6)
+      Array.from(document.querySelectorAll(".product-image > img"))
+        .map((img) => img.src)
+        .splice(0, 6)
     );
 
     const links = await page.evaluate(() =>
-      Array.from(document.querySelectorAll(".product-name > a")).map(
-        (partner) => partner.href
-      ).splice(0, 6)
+      Array.from(document.querySelectorAll(".product-name > a"))
+        .map((partner) => partner.href)
+        .splice(0, 6)
     );
     let arr = [];
     arr.push(titles, prices, imgs, links, ["Farmacias del ahorro"]);
@@ -262,12 +261,12 @@ async function search(m, p) {
   //const pS = await searchSup(m, p);
   //const pG = await searchFarGi(m,p);
 
-  const titles = pA[0].concat(pC[0], pFS[0], pFN[0]);//, pS[0]); //,pG[0]);
-  const prices = pA[1].concat(pC[1], pFS[1], pFN[1]);//, pS[1]); //,pG[1]);
-  const imgs = pA[2].concat(pC[2], pFS[2], pFN[2]);//, pS[2]); //,pG[2]);
-  const links = pA[3].concat(pC[3], pFS[3], pFN[3]);//, pS[3]); //,pG[3]);
+  const titles = pA[0].concat(pC[0], pFS[0], pFN[0]); //, pS[0]); //,pG[0]);
+  const prices = pA[1].concat(pC[1], pFS[1], pFN[1]); //, pS[1]); //,pG[1]);
+  const imgs = pA[2].concat(pC[2], pFS[2], pFN[2]); //, pS[2]); //,pG[2]);
+  const links = pA[3].concat(pC[3], pFS[3], pFN[3]); //, pS[3]); //,pG[3]);
 
-  const resultados = [pA, pC, pFN, pFS];//, pS];
+  const resultados = [pA, pC, pFN, pFS]; //, pS];
 
   for (let i = 0; i < resultados.length; i++) {
     for (let j = 0; j < resultados[0].length; j++) {
@@ -280,13 +279,13 @@ async function search(m, p) {
       prod.push(resultado);
     }
   }
-    if(!prod || 0 === prod.length){
-      const ob = new Object();
-      ob.desc = [];
-      ob.precio = [];
-      ob.img = [];
-      //ob.link = [];
-      prod.push(ob);
+  if (!prod || 0 === prod.length) {
+    const ob = new Object();
+    ob.desc = [];
+    ob.precio = [];
+    ob.img = [];
+    //ob.link = [];
+    prod.push(ob);
   }
 
   return prod;
